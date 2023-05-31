@@ -1,19 +1,43 @@
-import Posts from "@/components/Posts";
+import Posts from "@/containers/Posts";
 import { PrismaClient } from "@prisma/client";
 import { GetStaticProps } from "next";
 import { useSession, getCsrfToken } from "next-auth/react";
 import { useEffect } from "react";
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const Home = ({ posts }: any) => {
   const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <h1>loading...</h1>;
-  }
+  // if (status === "loading") {
+  //   return <h1>loading...</h1>;
+  // }
   return <Posts data={posts} />;
 };
 
 export const getStaticProps: GetStaticProps = async () => {
   const prisma = new PrismaClient();
+  // createPost()
+  // createPost()
+  // createPost()
+  // createPost()
   const posts = await prisma.post.findMany({
     include: {
       author: true,

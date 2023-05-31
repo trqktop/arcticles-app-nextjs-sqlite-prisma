@@ -1,24 +1,16 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
-// import { getToken } from "next-auth/jwt";
-// import Sess
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+
+
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_URL + "",
   // callbacks: {
-  //   async jwt({ token, account }) {
-  //     // Persist the OAuth access_token to the token right after signin
-  //     if (account) {
-  //       token.accessToken = account.access_token;
-  //     }
-  //     return token;
-  //   },
-  //   async session({ session, token, user }: any) {
-  //     // Send properties to the client, like an access_token from a provider.
-  //     session.accessToken = token.accessToken;
-  //     return session;
+  //   async session({ session, user }) {
+  //     return session
   //   },
   // },
   providers: [
@@ -42,19 +34,16 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
       },
+
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      session.user = user
+      console.log(user)
+      return session
+    }
+  },
 };
 
 export default NextAuth(authOptions);
-
-// {
-//   "data": {
-//       "user": {
-//           "name": "admin",
-//           "email": "admin@admin.com"
-//       },
-//       "expires": "2023-06-30T09:14:09.651Z"
-//   },
-//   "status": "authenticated"
-// }

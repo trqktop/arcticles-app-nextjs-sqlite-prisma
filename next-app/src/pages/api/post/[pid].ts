@@ -6,7 +6,9 @@ export default async function handler(req: any, res: any) {
   switch (req.method) {
     case "DELETE":
       await prisma.post.delete({ where: { id: Number(pid) } });
+      const posts = await prisma.post.findMany();
+      res.json(posts);
   }
 
-  res.end(`Post: ${pid}`);
+  // res.end(`Post: ${pid}`);
 }

@@ -15,14 +15,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import Form from "../Form";
 
-const Post = ({ data }: any) => {
-  const deleteHandler = async () => {
-    fetch(`http://localhost:3000/api/post/${data.id}`, {
-      method: "DELETE",
-    });
-  };
+const Post = ({ data, deleteHandler }: any) => {
+
 
   return (
     <Card>
@@ -36,12 +32,12 @@ const Post = ({ data }: any) => {
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="194"
         image="/static/images/cards/paella.jpg"
         alt="Paella dish"
-      />
+      /> */}
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           This impressive paella is a perfect party dish and a fun meal to cook
@@ -50,11 +46,12 @@ const Post = ({ data }: any) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="delete" color="primary" onClick={deleteHandler}>
+        <IconButton aria-label="delete" color="primary" onClick={() => deleteHandler(data.id)}>
           <DeleteIcon />
         </IconButton>
         <IconButton aria-label="delete" color="primary">
-          <EditIcon />
+          {/* <EditIcon /> */}
+          <Form create={false} post={data} />
         </IconButton>
       </CardActions>
       <CardContent>
