@@ -1,49 +1,50 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextApiHandler } from "next";
+import NextAuth, { AuthOptions, NextAuthOptions } from "next-auth";
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { AdapterUser } from "next-auth/adapters";
+const prisma = new PrismaClient()
 
-
-const prisma = new PrismaClient();
-
-export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_URL + "",
-  // callbacks: {
-  //   async session({ session, user }) {
-  //     return session
-  //   },
-  // },
+const options: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        username: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        const user: any = await prisma.user.findFirst({
+        const { email, password } = req.body!
+        const user = await prisma.user.findUnique({
           where: {
-            email: credentials?.username,
-            password: credentials?.password,
-          },
-        });
-
-        if (user) {
-          return user;
+            email: email
+          }
+        })
+        if (user && user.password === password) {
+          return user
         } else {
-          return null;
+          return null
         }
-      },
-
-    }),
+      }
+    })
   ],
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt'
+  },
   callbacks: {
-    async session({ session, user }) {
-      session.user = user
-      console.log(user)
+    jwt({ token, user }: any) {
+      if (user) token.role = user.role
+      return token
+    },
+    session({ session, token }: any) {
+      session.user.role = token.role
       return session
     }
   },
+  secret: process.env.SECRET,
 };
 
-export default NextAuth(authOptions);
+const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
+export default authHandler;

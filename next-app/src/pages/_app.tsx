@@ -1,15 +1,12 @@
-// import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
-import Layout from "../components/App";
-// const inter = Inter({ subsets: ["latin"] });
+import { AppProps } from "next/app";
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}: any) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <SessionProvider session={session}>
-      <Layout Component={Component} pageProps={pageProps} />
+    <SessionProvider session={pageProps.session}>
+      <Component {...pageProps} />
     </SessionProvider>
   );
-}
+};
+
+export default App;
