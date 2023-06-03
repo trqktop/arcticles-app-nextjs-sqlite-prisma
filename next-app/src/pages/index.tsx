@@ -4,7 +4,7 @@ import { GetStaticProps } from 'next'
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import Posts from '@/components/Posts'
-
+import prisma from '../../lib/prisma'
 //
 
 
