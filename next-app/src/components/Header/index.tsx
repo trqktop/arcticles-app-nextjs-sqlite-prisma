@@ -3,6 +3,7 @@ import Button from '@mui/joy/Button';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useEffect, useState } from 'react';
+import Form from '../Form';
 const Header = () => {
 
   const [state, setState] = useState({
@@ -40,6 +41,7 @@ const Header = () => {
       >
         {session.data ? <>signOut</> : <>signIn</>}
       </Button>
+      <Form />
     </header>
   )
 }

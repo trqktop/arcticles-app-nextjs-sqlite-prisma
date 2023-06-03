@@ -17,6 +17,7 @@ import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSession } from "next-auth/react";
+import Form from "../Form";
 
 const Post = ({ data }: any) => {
 
@@ -50,6 +51,7 @@ const Post = ({ data }: any) => {
         action={
           <CardActions disableSpacing>
             <ButtonGroup />
+            <Form />
           </CardActions>
         }
         title="Shrimp and Chorizo Paella"
