@@ -18,10 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSession } from "next-auth/react";
 
-
-
 const Post = ({ data }: any) => {
-
 
   const deleteHandler = async () => {
     // fetch(`http://localhost:3000/api/post/${data.id}`, {
@@ -32,8 +29,7 @@ const Post = ({ data }: any) => {
 
   const ButtonGroup = () => {
     const session = useSession()
-    if (session.data && session.data.user) {
-      console.log(session.data.user)
+    if (session?.data?.user?.role === '1') {
       return (
         <>
           <IconButton aria-label="delete" color="primary" onClick={deleteHandler}>
@@ -47,8 +43,6 @@ const Post = ({ data }: any) => {
     }
     return null
   }
-
-
 
   return (
     <Card>
