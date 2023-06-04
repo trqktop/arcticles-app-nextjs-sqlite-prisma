@@ -7,13 +7,22 @@ import Posts from '@/components/Posts'
 import prisma from '../../lib/prisma'
 import React from 'react';
 
-export const PostContext = React.createContext({ deletePostHandler: (id: string) => Promise.resolve() });
+
+type PostFormData = {
+  title: string, content: string, type: 'update' | 'create', id?: string
+}
+
+
+export const PostContext = React.createContext({
+  deletePostHandler: (id: string) => Promise.resolve(),
+  createPostHandler: (args: PostFormData) => Promise.resolve(),
+});
 
 const Home = ({ data }: any) => {
   const [state, setState] = useState({
     posts: JSON.parse(data),
   })
-console.log(state.posts)
+
   const deletePostHandler = async (id: string) => {
     try {
       const response = await fetch(`http://localhost:3000/api/post/${id}`, {
@@ -26,9 +35,28 @@ console.log(state.posts)
     }
   };
 
+
+
+  const createPostHandler = async ({ type, id, ...data }: PostFormData) => {
+    switch (type) {
+      case 'update':
+        const response = await fetch(`http://localhost:3000/api/post/${id}`, {
+          method: "UPDATE",
+          body: JSON.stringify(data)
+        })
+        console.log(data)
+        // const data = await response.json();
+        // setState((p) => ({ ...p, posts: data.posts }))
+        break
+      case 'create':
+        break
+    }
+  }
+
+
   return (
     <div>
-      <PostContext.Provider value={{ deletePostHandler }}>
+      <PostContext.Provider value={{ deletePostHandler, createPostHandler }}>
         <Header />
         <Content>
           <Posts posts={state.posts} />
@@ -41,13 +69,6 @@ console.log(state.posts)
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-  // await prisma.post.create({
-  //   data: {
-  //     title: 'lorem',
-  //     authorId: "5119ea7d-65ea-4ffa-8cb8-47a90befbfdd",
-  //     content: 'lorem'
-  //   }
-  // })
   const posts = (await prisma.post.findMany({ include: { author: true } }))
   return { props: { data: JSON.stringify(posts) } };
 };

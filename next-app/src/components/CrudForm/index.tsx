@@ -10,12 +10,26 @@ import Typography from '@mui/joy/Typography';
 import { useSession } from 'next-auth/react';
 import { IconButton } from '@mui/material';
 import { Tooltip, Textarea } from '@mui/joy';
+import { PostContext } from '@/pages';
 
 
 export default function CrudForm({ icon, type, data }: { icon: any, type: 'create' | 'update', data?: any }) {
     const [open, setOpen] = React.useState<boolean>(false);
     const title = type === 'update' ? data.title : ''
     const content = type === 'update' ? data.content : ''
+    const { createPostHandler } = React.useContext(PostContext)
+    const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.currentTarget as HTMLFormElement;
+        const formData = new FormData(form);
+        const title = formData.get('title') as string
+        const content = formData.get('content') as string
+        if (title && content) {
+            console.log(data.id)
+            createPostHandler({ title, content, type, id: data.id })
+            setOpen(false);
+        }
+    }
 
     const session = useSession()
     if (session?.data?.user?.role === '1')
@@ -40,18 +54,17 @@ export default function CrudForm({ icon, type, data }: { icon: any, type: 'creat
                         </Typography>
                         <form
                             onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-                                event.preventDefault();
-                                setOpen(false);
+                                onSubmit(event)
                             }}
                         >
                             <Stack spacing={2}>
                                 <FormControl>
                                     <FormLabel>Name</FormLabel>
-                                    <Input autoFocus required defaultValue={title} />
+                                    <Input name='title' autoFocus required defaultValue={title} />
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel>Description</FormLabel>
-                                    <Textarea maxRows={3} required defaultValue={content} />
+                                    <Textarea name='content' maxRows={3} required defaultValue={content} />
                                 </FormControl>
                                 <Button type="submit">Submit</Button>
                             </Stack>
