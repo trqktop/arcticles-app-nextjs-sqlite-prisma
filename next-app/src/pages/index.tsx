@@ -2,27 +2,52 @@ import Content from '@/components/Content'
 import Header from '@/components/Header'
 import { GetStaticProps } from 'next'
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Posts from '@/components/Posts'
 import prisma from '../../lib/prisma'
-//
+import React from 'react';
 
+export const PostContext = React.createContext({ deletePostHandler: (id: string) => Promise.resolve() });
 
 const Home = ({ data }: any) => {
-    const posts = JSON.parse(data)
-    return (
-        <div>
-            <Header />
-            <Content>
-                <Posts posts={posts} />
-            </Content>
-        </div>
-    )
+  const [state, setState] = useState({
+    posts: JSON.parse(data),
+  })
+console.log(state.posts)
+  const deletePostHandler = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/post/${id}`, {
+        method: "DELETE",
+      })
+      const data = await response.json();
+      setState((p) => ({ ...p, posts: data.posts }))
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  return (
+    <div>
+      <PostContext.Provider value={{ deletePostHandler }}>
+        <Header />
+        <Content>
+          <Posts posts={state.posts} />
+        </Content>
+      </PostContext.Provider>
+    </div>
+  )
 }
 
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-    const posts = (await prisma.post.findMany({ include: { author: true } }))
-    return { props: { data: JSON.stringify(posts) } };
+  // await prisma.post.create({
+  //   data: {
+  //     title: 'lorem',
+  //     authorId: "5119ea7d-65ea-4ffa-8cb8-47a90befbfdd",
+  //     content: 'lorem'
+  //   }
+  // })
+  const posts = (await prisma.post.findMany({ include: { author: true } }))
+  return { props: { data: JSON.stringify(posts) } };
 };
