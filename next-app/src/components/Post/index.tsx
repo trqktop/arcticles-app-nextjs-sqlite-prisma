@@ -12,10 +12,11 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  Grid,
 } from "@mui/material";
 import NextLink from "next/link";
 import Typography from "@mui/joy/Typography";
-import { Box, Link, Tooltip } from "@mui/joy";
+import { Box, Divider, Link, Stack, Tooltip } from "@mui/joy";
 import React, { useContext } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -52,8 +53,9 @@ const Post = ({ data }: any) => {
   const AuthorLink = ({ author }: any) => {
     if (author)
       return (
-        <NextLink href={`profile/${author.id}`}>
-          author: {author.email} {author.name}
+        <NextLink href={`profile/${author.id}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Avatar src="/broken-image.jpg" sizes="sm" sx={{ width: '16px', height: '16px' }} />
+          <Typography sx={{ fontSize: '14px', color: '#1976d2' }}>{author.name} {author.surname}</Typography>
         </NextLink>
       );
     return null;
@@ -73,16 +75,16 @@ const Post = ({ data }: any) => {
             {data.title}
           </Typography>
         }
-      // subheader={}
       />
       <CardContent sx={{ paddingTop: '8px' }}>
-        <Typography level="body1" fontSize="sm" gutterBottom>
+        <Typography level="body1" fontSize="sm" sx={{ paddingBottom: '16px' }}>
           {data.content}
         </Typography>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "flex-start", gap: '8px' }}>
           <Typography sx={{ fontSize: 14 }} gutterBottom level="body5">
             LastUpdated : {data.updatedAt}
           </Typography>
+          <Divider orientation="vertical" sx={{ height: '16px' }} />
           <Typography sx={{ fontSize: 14 }} level="body5">
             Created : {data.createdAt}
           </Typography>
@@ -94,3 +96,5 @@ const Post = ({ data }: any) => {
 };
 
 export default Post;
+
+
