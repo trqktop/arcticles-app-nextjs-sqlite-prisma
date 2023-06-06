@@ -1,17 +1,16 @@
-
-
+import Header from "../Header";
+import styles from "./Layout.module.scss";
 type Props = {
-    children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const Layout = ({ children }: Props) => {
-    return (
-        <div className="page">
-            <header></header>
-            <main>{children}</main>
-        </div>
-    )
-}
+  return (
+    <div className={styles.page}>
+      <Header />
+      <main className={styles.content}>{children}</main>
+    </div>
+  );
+};
 
-
-export default Layout
+export default Layout;

@@ -1,47 +1,54 @@
 import { NextApiHandler } from "next";
-import NextAuth, { AuthOptions, NextAuthOptions } from "next-auth";
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import NextAuth, { AuthOptions } from "next-auth";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
-import { AdapterUser } from "next-auth/adapters";
 import prisma from "../../../../lib/prisma";
 
-const options: AuthOptions = {
+const options: any = {
   providers: [
     CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
-        const { email, password } = req.body!
-        const user = await prisma.user.findUnique({
+      async authorize(credentials: any, req: any) {
+        const { email, password } = req.body!;
+        const user: any = await prisma.user.findUnique({
           where: {
-            email: email
-          }
-        })
+            email: email,
+          },
+        });
         if (user && user.password === password) {
-          return user
+          return user;
         } else {
-          return null
+          return null;
         }
-      }
-    })
+      },
+    }),
   ],
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: 'jwt'
+    strategy: "jwt",
   },
   callbacks: {
     jwt({ token, user }: any) {
-      if (user) token.role = user.role
-      return token
+      if (user) {
+        token.role = user.role;
+        token.password = user.password;
+        token.id = user.id;
+      }
+      return token;
     },
     session({ session, token }: any) {
-      session.user.role = token.role
-      return session
-    }
+      session.user.role = token.role;
+      session.user.id = token.id;
+      session.user.password = token.password;
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/login",
   },
   secret: process.env.SECRET,
 };

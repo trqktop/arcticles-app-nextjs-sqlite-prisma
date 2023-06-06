@@ -3,7 +3,10 @@ CREATE TABLE "Post" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "content" TEXT,
-    "published" BOOLEAN NOT NULL DEFAULT false,
+    "published" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" DATETIME NOT NULL,
+    "deletedAt" TEXT,
     "authorId" TEXT,
     CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -41,12 +44,15 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT,
     "email" TEXT NOT NULL,
+    "surname" TEXT,
     "password" TEXT NOT NULL,
     "role" TEXT NOT NULL,
+    "lastname" TEXT,
+    "serial" TEXT,
+    "number" TEXT,
+    "date" TEXT,
     "email_verified" DATETIME,
-    "image" TEXT,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" DATETIME NOT NULL
+    "image" TEXT
 );
 
 -- CreateTable

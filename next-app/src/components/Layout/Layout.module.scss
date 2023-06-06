@@ -1,0 +1,11 @@
+.content {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 30px;
+}
