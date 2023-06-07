@@ -48,14 +48,12 @@ function ProfileTabs({ user }: any) {
   const updateHandler = async (args: any) => {
     await updatePostHandler(args)
     setPosts((p: any) => {
-      const posts = ({ ...p })
-      const updatedPosts = posts.map((post: any) => {
+      return p.map((post: any) => {
         if (post.id === args.id) {
           return ({ ...p, ...args })
         }
         return post
       })
-      return { ...updatedPosts }
     })
   }
 
