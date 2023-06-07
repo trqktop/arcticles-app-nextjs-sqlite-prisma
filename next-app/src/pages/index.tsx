@@ -1,84 +1,29 @@
 import { GetStaticProps } from "next";
-import {  useState } from "react";
+import { useContext } from "react";
 import Posts from "@/components/Posts";
 import prisma from "../../lib/prisma";
-import React from "react";
+import React, { useState } from "react";
 import CrudForm from "@/components/CrudForm";
 import { Add } from "@mui/icons-material";
-
-type PostFormData = {
-  title: string;
-  content: string;
-  type: "update" | "create";
-  id?: string;
-  authorId: string;
-};
-
-export const PostContext = React.createContext({
-  deletePostHandler: (id: string) => Promise.resolve(),
-  updatePostHandler: (args: PostFormData) => Promise.resolve(),
-});
+import { PostContext } from "./_app";
 
 const Home = ({ data }: any) => {
-  const [state, setState] = useState({
-    posts: JSON.parse(data),
-  });
-
-  const deletePostHandler = async (id: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/post/${id}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
-      setState((p) => ({ ...p, posts: data.posts }));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updatePostHandler = async ({ type, id, ...data }: PostFormData) => {
-    switch (type) {
-      case "update":
-        try {
-          const response = await fetch(`http://localhost:3000/api/post/${id}`, {
-            method: "PATCH",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const result = await response.json();
-          setState((p) => ({ ...p, posts: result.posts }));
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      case "create":
-        try {
-          const response = await fetch(`http://localhost:3000/api/post/new`, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const result = await response.json();
-          setState((p) => ({ ...p, posts: result.posts }));
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-    }
-  };
-
+  const [posts, setPosts] = useState(JSON.parse(data))
+  const { deletePostHandler, updatePostHandler } = useContext(PostContext)
+  const deleteHandler = async (id: string) => {
+    const result: any = await deletePostHandler(id)
+    setPosts(result.posts)
+  }
+  const updateHandler = async (args: any) => {
+    const result: any = await updatePostHandler(args)
+    setPosts(result.posts)
+  }
   return (
     <div>
-      <PostContext.Provider value={{ deletePostHandler, updatePostHandler }}>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <CrudForm title="Создать пост" icon={<Add />} type="create" />
-        </div>
-        <Posts posts={state.posts} />
-      </PostContext.Provider>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <CrudForm title="Создать пост" icon={<Add />} updateHandler={updateHandler} type="create" />
+      </div>
+      <Posts posts={posts} deleteHandler={deleteHandler} updateHandler={updateHandler} />
     </div>
   );
 };

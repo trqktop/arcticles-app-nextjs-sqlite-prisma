@@ -17,29 +17,30 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSession } from "next-auth/react";
 import CrudForm from "../CrudForm";
-import { PostContext } from "@/pages";
+import { PostContext } from "@/pages/_app";
 
 import styles from "./Post.module.scss";
 import DateComponent from "../DateComponent";
 
-const Post = ({ data, crudHidden }: any) => {
-  const { deletePostHandler } = useContext(PostContext);
-
-  const deleteHandler = async () => {
-    deletePostHandler(data.id);
+const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
+  const deletePost = async () => {
+    deleteHandler(data.id);
   };
+
+
   const ButtonGroup = () => {
     const session = useSession();
-
     if (session?.data?.user?.role === "1") {
       return (
         <React.Fragment>
           <Tooltip title="Удалить пост">
-            <IconButton color="primary" onClick={deleteHandler}>
+            <IconButton color="primary" onClick={deletePost}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
           <CrudForm
+            updateHandler={updateHandler}
+            deleteHandler={deleteHandler}
             title="Обновить пост"
             icon={<EditIcon />}
             type="update"
@@ -77,7 +78,7 @@ const Post = ({ data, crudHidden }: any) => {
       <CardHeader
         className={styles.header}
         action={
-          crudHidden ? null : (
+          (
             <CardActions disableSpacing>
               <ButtonGroup />
             </CardActions>

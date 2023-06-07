@@ -4,7 +4,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
 import { Tooltip } from "@mui/joy";
-import { PostContext } from "@/pages";
+import { PostContext } from "@/pages/_app";
 import { Button, Checkbox, Form, Input } from "antd";
 const { TextArea } = Input;
 
@@ -13,19 +13,20 @@ const CrudForm = ({
   type,
   title,
   data,
+  updateHandler
 }: {
   icon: any;
   type: "create" | "update";
   title: string;
   data?: any;
+  updateHandler: any
 }) => {
   const session = useSession();
   const [open, setOpen] = React.useState<boolean>(false);
   const postTitle = type === "update" ? data.title : "";
   const postContent = type === "update" ? data.content : "";
-  const { updatePostHandler } = React.useContext(PostContext);
   const onFinish = async ({ title, content }: any) => {
-    updatePostHandler({
+    updateHandler({
       title,
       content,
       type,

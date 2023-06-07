@@ -3,8 +3,13 @@ import { List, ListItem, Typography } from "@mui/material";
 import { memo } from "react";
 import CrudForm from "../CrudForm";
 import Post from "../Post";
+import { useContext } from 'react'
+import { PostContext } from "@/pages/_app";
 
-const Posts = ({ posts, crudHidden }: any) => {
+
+
+
+const Posts = ({ posts, crudHidden, deleteHandler, updateHandler }: any) => {
   return (
     <>
       <List
@@ -19,7 +24,7 @@ const Posts = ({ posts, crudHidden }: any) => {
       >
         {posts.map((item: any) => (
           <ListItem key={item.id} sx={{ maxWidth: "780px", margin: "auto" }}>
-            <Post data={item} crudHidden={crudHidden} />
+            <Post data={item} crudHidden={crudHidden} deleteHandler={deleteHandler} updateHandler={updateHandler} />
           </ListItem>
         ))}
       </List>
