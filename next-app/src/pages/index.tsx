@@ -1,11 +1,10 @@
-import Content from "@/components/Content";
-import Header from "@/components/Header";
-import { GetServerSideProps, GetStaticProps } from "next";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { GetStaticProps } from "next";
+import {  useState } from "react";
 import Posts from "@/components/Posts";
 import prisma from "../../lib/prisma";
 import React from "react";
+import CrudForm from "@/components/CrudForm";
+import { Add } from "@mui/icons-material";
 
 type PostFormData = {
   title: string;
@@ -75,6 +74,9 @@ const Home = ({ data }: any) => {
   return (
     <div>
       <PostContext.Provider value={{ deletePostHandler, updatePostHandler }}>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <CrudForm title="Создать пост" icon={<Add />} type="create" />
+        </div>
         <Posts posts={state.posts} />
       </PostContext.Provider>
     </div>
@@ -98,3 +100,4 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return { props: { data: JSON.stringify(posts) } };
 };
+

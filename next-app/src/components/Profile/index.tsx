@@ -28,7 +28,7 @@ const Profile = () => {
     signOut();
     setAnchorEl(null);
   };
-console.log(session)
+
   if (session.data) {
     const avatar = session.data.user.email[0].toUpperCase();
     return (
@@ -85,7 +85,7 @@ console.log(session)
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
           <MenuItem
-            onClick={() => route.push(`profile/${session.data.user.id}`)}
+            onClick={() => route.push(`/profile/${session.data.user.id}`)}
           >
             <Avatar />
             {session.data.user.email}

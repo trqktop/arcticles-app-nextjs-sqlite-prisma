@@ -11,21 +11,27 @@ import {
 import { Tooltip } from "@mui/joy";
 import React from "react";
 import User from "../User";
+import ProfileInfo from "../ProfileInfo";
 
 const UserList = ({ users, deleteUserHandler }: any) => {
   return (
     <List
       sx={{
-        minWidth: "100%",
-        width: "100%",
-        bgcolor: "background.paper",
         display: "flex",
-        flexDirection: "column",
-        rowGap: "80px",
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        flexWrap: "wrap",
+        maxWidth: "900px",
       }}
     >
       {users.map((item: any) => (
-        <ListItem key={item.id} sx={{ maxWidth: "780px", margin: "auto" }}>
+        <ListItem
+          key={item.id}
+          sx={{
+            maxWidth: "300px",
+            minHeight: "100%",
+          }}
+        >
           <User deleteUserHandler={deleteUserHandler} data={item} />
         </ListItem>
       ))}

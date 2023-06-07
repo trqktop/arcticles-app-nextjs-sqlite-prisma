@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select } from "antd";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 type FormData = {
   email: string;
@@ -7,7 +8,10 @@ type FormData = {
 };
 
 const Registration = () => {
+  const [loading, setLoading] = useState(false);
+
   const submitHandler = async (form: FormData) => {
+    setLoading(true);
     const { email, password } = form;
     await fetch("api/registration", {
       method: "POST",
@@ -28,59 +32,123 @@ const Registration = () => {
   return (
     <div style={{ margin: "auto" }}>
       <Form
+        disabled={loading}
         name="registration"
         labelCol={{ span: 8 }}
+        layout="horizontal"
         wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        // style={{ maxWidth: 600 }}
         onFinish={submitHandler}
         autoComplete="off"
       >
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Поле должно быть формата name@domen.ru",
+              type: "email",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           label="password"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Пароль должен быть от 4 до 16 символов",
+              min: 4,
+              max: 16,
+            },
+          ]}
         >
           <Input.Password />
         </Form.Item>
 
         <Form.Item
-          label="name"
-          name="name"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input />
-        </Form.Item>
-
-
-        <Form.Item
           label="surname"
           name="surname"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Фамилия должна содержать от 2 до 16 символов",
+              min: 2,
+              max: 16,
+            },
+          ]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item label="lastname" name="lastname">
+        <Form.Item
+          label="name"
+          name="name"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Имя должно содержать от 2 до 16 символов",
+              min: 2,
+              max: 16,
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label="serial" name="serial">
+        <Form.Item
+          hasFeedback
+          label="lastname"
+          name="lastname"
+          rules={[
+            {
+              message: "Отчество должно содержать от 2 до 16 символов",
+              min: 2,
+              max: 16,
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label="number" name="number">
+        <Form.Item
+          hasFeedback
+          label="serial"
+          name="serial"
+          rules={[
+            {
+              message: "Серия должна содержать от 4 до 10 символов",
+              min: 4,
+              max: 10,
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label="role" name="role" initialValue={"1"}>
+        <Form.Item
+          hasFeedback
+          label="номер"
+          name="number"
+          rules={[
+            {
+              message: "Номер должен содержать от 6 до 10 символов",
+              min: 6,
+              max: 10,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item hasFeedback label="role" name="role" initialValue={"1"}>
           <Select
             options={[
               {
@@ -95,7 +163,7 @@ const Registration = () => {
           />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button loading={loading} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

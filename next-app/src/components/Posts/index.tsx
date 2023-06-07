@@ -1,12 +1,12 @@
 import { Add } from "@mui/icons-material";
-import { List, ListItem } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
+import { memo } from "react";
 import CrudForm from "../CrudForm";
 import Post from "../Post";
 
-const Posts = ({ posts }: any) => {
+const Posts = ({ posts, crudHidden }: any) => {
   return (
     <>
-      <CrudForm icon={<Add />} type="create" />
       <List
         sx={{
           minWidth: "100%",
@@ -19,7 +19,7 @@ const Posts = ({ posts }: any) => {
       >
         {posts.map((item: any) => (
           <ListItem key={item.id} sx={{ maxWidth: "780px", margin: "auto" }}>
-            <Post data={item} />
+            <Post data={item} crudHidden={crudHidden} />
           </ListItem>
         ))}
       </List>
@@ -27,4 +27,4 @@ const Posts = ({ posts }: any) => {
   );
 };
 
-export default Posts;
+export default memo(Posts);

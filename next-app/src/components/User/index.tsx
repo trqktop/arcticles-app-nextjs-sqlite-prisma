@@ -10,29 +10,22 @@ import {
 } from "@mui/material";
 import { Tooltip } from "@mui/joy";
 import React from "react";
+import ProfileInfo from "../ProfileInfo";
 
 const User = ({ deleteUserHandler, data }: any) => {
-
   return (
     <Card sx={{ width: "100%" }}>
-      <CardHeader
-        action={
-          <CardActions
-            disableSpacing
-            onClick={() => deleteUserHandler(data.id)}
-          >
-            <IconButton color="primary">
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        }
-        title={"Пользователь: " + data.name + " " + data.surname}
-        subheader={`права: ${data.role === "1" ? "admin" : "user"}`}
-      />
       <CardContent>
-        {/* <Typography paragraph>{"имя " + data.name}</Typography> */}
-        <Typography paragraph>{"почта " + data.email}</Typography>
-        <Typography paragraph>{"id " + data.id}</Typography>
+        <CardActions
+          disableSpacing
+          onClick={() => deleteUserHandler(data.id)}
+          sx={{ justifyContent: "flex-end" }}
+        >
+          <IconButton color="primary" sx={{ padding: 0 }}>
+            <DeleteIcon />
+          </IconButton>
+        </CardActions>
+        <ProfileInfo user={data} />
       </CardContent>
     </Card>
   );

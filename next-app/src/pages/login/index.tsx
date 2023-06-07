@@ -6,45 +6,58 @@ type FormData = {
   password: string;
 };
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const [errorStatus, setError] = useState<any>("");
   const submitHandler = async (form: FormData) => {
-    try {
-      await signIn("credentials", {
-        email: form.email,
-        password: form.password,
-        callbackUrl: "/",
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(true);
+    await signIn("credentials", {
+      redirect: false,
+      email: form.email,
+      password: form.password,
+    }).then(({ ok, error }: any) => {
+      if (error) {
+        setError("error");
+      }
+      setLoading(false);
+    });
   };
 
   return (
     <div style={{ margin: "auto" }}>
       <Form
+        disabled={loading}
         name="login"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
         onFinish={submitHandler}
-        autoComplete="off"
       >
         <Form.Item
           label="Email"
+          hasFeedback
           name="email"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          help={errorStatus ? "Неверный логин или пароль" : null}
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Поле должно быть формата name@domen.ru",
+            },
+          ]}
         >
-          <Input />
+          <Input status={errorStatus} />
         </Form.Item>
-
         <Form.Item
           label="password"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          hasFeedback
+          help={errorStatus ? "Неверный логин или пароль" : null}
+          rules={[{ required: true, message: "Обязательное поле" }]}
         >
-          <Input.Password />
+          <Input.Password status={errorStatus} />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button loading={loading} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

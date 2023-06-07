@@ -1,9 +1,4 @@
 import {
-  FavoriteOutlined,
-  MoreVertOutlined,
-  ShareOutlined,
-} from "@mui/icons-material";
-import {
   // Typography,
   Card,
   CardHeader,
@@ -23,9 +18,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useSession } from "next-auth/react";
 import CrudForm from "../CrudForm";
 import { PostContext } from "@/pages";
-import CenterFocusWeak from "@mui/icons-material/CenterFocusWeak";
 
-const Post = ({ data }: any) => {
+import styles from "./Post.module.scss";
+import DateComponent from "../DateComponent";
+
+const Post = ({ data, crudHidden }: any) => {
   const { deletePostHandler } = useContext(PostContext);
 
   const deleteHandler = async () => {
@@ -37,64 +34,96 @@ const Post = ({ data }: any) => {
     if (session?.data?.user?.role === "1") {
       return (
         <React.Fragment>
-          <Tooltip title="delete post">
+          <Tooltip title="Удалить пост">
             <IconButton color="primary" onClick={deleteHandler}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          <CrudForm icon={<EditIcon />} type="update" data={data} />
+          <CrudForm
+            title="Обновить пост"
+            icon={<EditIcon />}
+            type="update"
+            data={data}
+          />
         </React.Fragment>
       );
     }
     return null;
   };
 
-
-  const AuthorLink = ({ author }: any) => {
+  const AuthorLink = ({ author, crudHidden }: any) => {
     if (author)
       return (
-        <NextLink href={`profile/${author.id}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Avatar src="/broken-image.jpg" sizes="sm" sx={{ width: '16px', height: '16px' }} />
-          <Typography sx={{ fontSize: '14px', color: '#1976d2' }}>{author.name} {author.surname}</Typography>
+        <NextLink
+          href={`profile/${author.id}`}
+          style={{
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <Avatar sizes="sm" sx={{ width: "16px", height: "16px" }} />
+          <Typography sx={{ fontSize: "14px", color: "#1976d2" }}>
+            {author.name}
+          </Typography>
         </NextLink>
       );
     return null;
   };
 
   return (
-    <Card sx={{ width: "100%" }}>
+    <Card className={styles.post}>
       <CardHeader
-        sx={{ paddingBottom: 0 }}
+        className={styles.header}
         action={
-          <CardActions disableSpacing>
-            <ButtonGroup />
-          </CardActions>
+          crudHidden ? null : (
+            <CardActions disableSpacing>
+              <ButtonGroup />
+            </CardActions>
+          )
         }
         title={
-          <Typography sx={{ fontSize: 24, fontWeight: 'bold' }} level="h1">
-            {data.title}
-          </Typography>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "8px",
+              padding: 0,
+              margin: 0,
+            }}
+          >
+            <AuthorLink author={data.author} crudHidden={crudHidden} />
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                alignItems: "center",
+                flexWrap: "wrap",
+                justifyContent: "flex-end",
+              }}
+            >
+              <DateComponent title="Дата создания" date={data.createdAt} />
+              <Divider orientation="vertical" sx={{ height: "16px" }} />
+              <DateComponent
+                title="Дата последнего обновления"
+                date={data.updatedAt}
+              />
+            </div>
+          </div>
         }
       />
-      <CardContent sx={{ paddingTop: '8px' }}>
-        <Typography level="body1" fontSize="sm" sx={{ paddingBottom: '16px' }}>
+      <CardContent sx={{ padding: 0, marginTop: "15px" }}>
+        <Typography sx={{ fontSize: 24, fontWeight: "bold" }} level="h1">
+          {data.title}
+        </Typography>
+        <Typography level="body1" fontSize="sm" sx={{ paddingBottom: "16px" }}>
           {data.content}
         </Typography>
-        <div style={{ display: "flex", justifyContent: "flex-start", gap: '8px' }}>
-          <Typography sx={{ fontSize: 14 }} gutterBottom level="body5">
-            LastUpdated : {data.updatedAt}
-          </Typography>
-          <Divider orientation="vertical" sx={{ height: '16px' }} />
-          <Typography sx={{ fontSize: 14 }} level="body5">
-            Created : {data.createdAt}
-          </Typography>
-        </div>
-        <AuthorLink author={data.author} />
       </CardContent>
     </Card>
   );
 };
 
 export default Post;
-
-
