@@ -7,6 +7,16 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+
+
+model File {
+  id      String  @id @default(uuid())
+  name    String
+  content     String
+  posts   Post[]
+}
+
+
 model Post {
   id        String  @id @default(uuid())
   title     String
@@ -16,7 +26,9 @@ model Post {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   deletedAt     String?
+  file          File?  @relation(fields: [fileId] , references: [id])
   authorId  String?
+  fileId    String?
 }
 
 model Account {

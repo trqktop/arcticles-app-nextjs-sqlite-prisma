@@ -2,6 +2,12 @@ import { breadcrumbsClasses } from "@mui/material";
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+  api: {
+    bodyParser: { sizeLimit: "25mb" },
+  },
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,7 +24,15 @@ export default async function handler(
           },
         });
         const posts = await prisma.post.findMany({
-          include: { author: true },
+          include: {
+            author: true,
+            file: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          },
           orderBy: [
             {
               createdAt: "desc",
@@ -38,19 +52,21 @@ export default async function handler(
       }
       break;
     case "PATCH":
-      const { title, content } = req.body;
       try {
         await prisma.post.update({
-          where: {
-            id,
-          },
-          data: {
-            title,
-            content,
-          },
+          where: { id },
+          data: req.body,
         });
         const posts = await prisma.post.findMany({
-          include: { author: true },
+          include: {
+            author: true,
+            file: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          },
           orderBy: [
             {
               createdAt: "desc",
@@ -71,11 +87,25 @@ export default async function handler(
       break;
     case "PUT":
       try {
-        await prisma.post.create({
-          data: req.body,
-        });
+
+        try {
+          await prisma.post.create({
+            data: req.body,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+
         const posts = await prisma.post.findMany({
-          include: { author: true },
+          include: {
+            author: true,
+            file: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          },
           orderBy: [
             {
               createdAt: "desc",

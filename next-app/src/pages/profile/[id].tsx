@@ -10,10 +10,11 @@ import { Avatar, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import Posts from "@/components/Posts";
 import ProfileInfo from "@/components/ProfileInfo";
-import { useState, useContext } from 'react'
+import { useState, useContext } from "react";
 import { PostContext } from "../_app";
 
-const Profile = ({ user }: any) => {
+const Profile = (params: any) => {
+  const user = params.user;
   if (user) {
     const parsedUser = JSON.parse(user);
     const { name, email, role, surname, lastname } = parsedUser;
@@ -36,26 +37,26 @@ const Profile = ({ user }: any) => {
 };
 
 function ProfileTabs({ user }: any) {
-  const [posts, setPosts] = useState(user.posts)
+  const [posts, setPosts] = useState(user.posts);
   const [value, setValue] = React.useState("1");
-  const { deletePostHandler, updatePostHandler } = useContext(PostContext)
-  console.log(user)
+  const { deletePostHandler, updatePostHandler } = useContext(PostContext);
+
   const deleteHandler = async (id: any) => {
-    await deletePostHandler(id)
-    setPosts((p: any) => p.filter((item: any) => item.id !== id))
-  }
+    await deletePostHandler(id);
+    setPosts((p: any) => p.filter((item: any) => item.id !== id));
+  };
 
   const updateHandler = async (args: any) => {
-    await updatePostHandler(args)
+    await updatePostHandler(args);
     setPosts((p: any) => {
       return p.map((post: any) => {
         if (post.id === args.id) {
-          return ({ ...p, ...args })
+          return { ...p, ...args };
         }
-        return post
-      })
-    })
-  }
+        return post;
+      });
+    });
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -74,7 +75,12 @@ function ProfileTabs({ user }: any) {
           <ProfileInfo user={user} />
         </TabPanel>
         <TabPanel value="2">
-          <Posts posts={posts} crudHidden={true} deleteHandler={deleteHandler} updateHandler={updateHandler} />
+          <Posts
+            posts={posts}
+            crudHidden={true}
+            deleteHandler={deleteHandler}
+            updateHandler={updateHandler}
+          />
         </TabPanel>
       </TabContext>
     </Box>
@@ -89,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
       include: {
         posts: {
-          where: { published: true }
+          where: { published: true },
         },
       },
     });

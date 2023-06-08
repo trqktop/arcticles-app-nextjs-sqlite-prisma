@@ -53,7 +53,25 @@ export default Users;
 export const getStaticProps: GetStaticProps = async () => {
   const users = await prisma.user.findMany({
     include: {
-      posts: true,
+      posts: {
+        include: {
+          author: true,
+          file: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        where: {
+          published: true,
+        },
+      },
     },
   });
   return { props: { data: JSON.stringify(users) } };

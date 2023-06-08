@@ -21,11 +21,35 @@ import { PostContext } from "@/pages/_app";
 
 import styles from "./Post.module.scss";
 import DateComponent from "../DateComponent";
+import { Button } from "antd";
 
 const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
   const deletePost = async () => {
     deleteHandler(data.id);
   };
+
+
+
+  const downloadPDF = () => {
+
+    fetch(`/api/file/${data.file.id}`).then(res => res.json()).then(res => {
+      const { content } = res
+      const byteCharacters = atob(content);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = data.file.name;
+      link.click();
+    })
+  };
+
+
+
 
 
   const ButtonGroup = () => {
@@ -40,7 +64,6 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
           </Tooltip>
           <CrudForm
             updateHandler={updateHandler}
-            deleteHandler={deleteHandler}
             title="Обновить пост"
             icon={<EditIcon />}
             type="update"
@@ -72,6 +95,12 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
       );
     return null;
   };
+
+
+
+
+
+
 
   return (
     <Card className={styles.post}>
@@ -122,6 +151,9 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
         <Typography level="body1" fontSize="sm" sx={{ paddingBottom: "16px" }}>
           {data.content}
         </Typography>
+        <Button onClick={downloadPDF} type="primary">
+          Скачать PDF
+        </Button>
       </CardContent>
     </Card>
   );

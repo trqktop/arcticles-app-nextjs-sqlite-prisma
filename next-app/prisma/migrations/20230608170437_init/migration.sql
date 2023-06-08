@@ -1,4 +1,11 @@
 -- CreateTable
+CREATE TABLE "File" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "content" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Post" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
@@ -8,7 +15,9 @@ CREATE TABLE "Post" (
     "updated_at" DATETIME NOT NULL,
     "deletedAt" TEXT,
     "authorId" TEXT,
-    CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "fileId" TEXT,
+    CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Post_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable

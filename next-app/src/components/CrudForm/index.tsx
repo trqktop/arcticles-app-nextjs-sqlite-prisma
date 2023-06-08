@@ -5,35 +5,87 @@ import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
 import { Tooltip } from "@mui/joy";
 import { PostContext } from "@/pages/_app";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Upload, UploadFile } from "antd";
+import { InboxOutlined, UploadOutlined } from "@mui/icons-material";
+import type { UploadProps } from "antd";
+import { RcFile } from "antd/es/upload";
+const { Dragger } = Upload;
 const { TextArea } = Input;
+
+function encodeFileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      const base64Content = base64String.split(",")[1];
+      resolve(base64Content);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+}
 
 const CrudForm = ({
   icon,
   type,
   title,
   data,
-  updateHandler
+  updateHandler,
 }: {
   icon: any;
   type: "create" | "update";
   title: string;
   data?: any;
-  updateHandler: any
+  updateHandler: any;
 }) => {
   const session = useSession();
   const [open, setOpen] = React.useState<boolean>(false);
   const postTitle = type === "update" ? data.title : "";
   const postContent = type === "update" ? data.content : "";
-  const onFinish = async ({ title, content }: any) => {
-    updateHandler({
-      title,
-      content,
-      type,
-      id: data?.id,
-      authorId: session.data?.user.id!,
-    });
-    setOpen(false);
+
+
+
+  const onFinish = async ({
+    title,
+    content,
+    dataFile
+  }: {
+    title: string;
+    content: string;
+    dataFile: any
+  }) => {
+
+
+    if (dataFile) {
+      const { file } = dataFile
+      const base64Content = await encodeFileToBase64(file);
+      fetch("/api/file/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ content: base64Content, name: file.name }),
+      }).then(res => res.json()).then(fileId => {
+        updateHandler({
+          title,
+          content,
+          type,
+          fileId: fileId.id,
+          id: data?.id,
+          authorId: session.data?.user.id!,
+        });
+        setOpen(false);
+      })
+    } else {
+      updateHandler({
+        title,
+        content,
+        type,
+        id: data?.id,
+        authorId: session.data?.user.id!,
+      });
+      setOpen(false);
+    }
   };
 
   if (session.data?.user.role === "1")
@@ -50,7 +102,6 @@ const CrudForm = ({
               name="curd"
               layout="vertical"
               style={{ maxWidth: 600 }}
-              initialValues={{ remember: true }}
               onFinish={onFinish}
             >
               <Form.Item
@@ -73,6 +124,7 @@ const CrudForm = ({
               >
                 <Input />
               </Form.Item>
+
               <Form.Item
                 hasFeedback
                 label="Статья"
@@ -98,6 +150,11 @@ const CrudForm = ({
                   Сохранить
                 </Button>
               </Form.Item>
+              <Form.Item name="dataFile">
+                <Upload beforeUpload={() => false} fileList={[]} multiple={false} maxCount={1}>
+                  <Button icon={<UploadOutlined />}>Select File</Button>
+                </Upload>
+              </Form.Item>
             </Form>
           </ModalDialog>
         </Modal>
@@ -106,4 +163,4 @@ const CrudForm = ({
   return null;
 };
 
-export default React.memo(CrudForm);
+export default CrudForm;
