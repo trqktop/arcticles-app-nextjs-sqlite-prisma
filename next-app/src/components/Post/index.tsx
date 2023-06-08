@@ -29,7 +29,6 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
   };
 
 
-
   const downloadPDF = () => {
 
     fetch(`/api/file/${data.file.id}`).then(res => res.json()).then(res => {
@@ -47,10 +46,6 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
       link.click();
     })
   };
-
-
-
-
 
   const ButtonGroup = () => {
     const session = useSession();
