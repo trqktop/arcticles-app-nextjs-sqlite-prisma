@@ -23,6 +23,7 @@ const Users = ({ data }: any) => {
   });
 
   const deleteUserHandler = async (id: string) => {
+
     try {
       const response = await fetch(`http://localhost:3000/api/users/${id}`, {
         method: "DELETE",

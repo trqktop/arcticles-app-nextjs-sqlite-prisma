@@ -28,9 +28,7 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
     deleteHandler(data.id);
   };
 
-
   const downloadPDF = () => {
-
     fetch(`/api/file/${data.file.id}`).then(res => res.json()).then(res => {
       const { content } = res
       const byteCharacters = atob(content);
@@ -46,7 +44,7 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
       link.click();
     })
   };
-
+ 
   const ButtonGroup = () => {
     const session = useSession();
     if (session?.data?.user?.role === "1") {
