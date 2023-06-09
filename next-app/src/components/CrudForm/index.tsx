@@ -33,7 +33,7 @@ const CrudForm = ({
   updateHandler,
 }: {
   icon: any;
-  type: "create" | "update";
+  type: string;
   title: string;
   data?: any;
   updateHandler: any;

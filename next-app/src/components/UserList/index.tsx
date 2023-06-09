@@ -22,6 +22,7 @@ const UserList = ({ users, deleteUserHandler }: any) => {
         justifyContent: "flex-start",
         flexWrap: "wrap",
         maxWidth: "900px",
+        margin:'auto'
       }}
     >
       {users.map((item: any) => (

@@ -1,24 +1,18 @@
 import Layout from "@/components/Layout";
+import { UpdatedPost } from "@/types";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import * as React from 'react'
 
 
-type PostFormData = {
-  title: string;
-  content: string;
-  type: "update" | "create";
-  id?: string;
-  authorId: string;
-};
+
 
 export const PostContext = React.createContext({
   deletePostHandler: (id: string) => Promise.resolve(),
-  updatePostHandler: (args: PostFormData) => Promise.resolve(),
+  updatePostHandler: (args: UpdatedPost) => Promise.resolve(),
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-
 
   const deletePostHandler = async (id: string) => {
     try {
@@ -28,11 +22,11 @@ const App = ({ Component, pageProps }: AppProps) => {
       const data = await response.json();
       return data
     } catch (error) {
-      console.log(error);
+      return { message: 'error' }
     }
   };
 
-  const updatePostHandler = async ({ type, id, ...data }: PostFormData) => {
+  const updatePostHandler = async ({ type, id, ...data }: UpdatedPost) => {
     switch (type) {
       case "update":
         try {

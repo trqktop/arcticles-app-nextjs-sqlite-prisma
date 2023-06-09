@@ -106,12 +106,14 @@ const Post: React.FC<PostProps> = ({
     return null;
   };
 
+
+
   return (
     <Card className={styles.post} >
       <CardHeader
         className={styles.header}
         action={
-          <Box sx={{ display: "flex" }}>
+          <Box>
             <ButtonGroup />
           </Box>
         }
@@ -136,8 +138,8 @@ const Post: React.FC<PostProps> = ({
         </Typography>
         <Typography
           variant="body1"
-          fontSize="sm"
           sx={{ paddingBottom: "16px" }}
+          style={{ display: 'flex', minWidth: '100%' }}
         >
           {data.content}
         </Typography>
@@ -168,9 +170,7 @@ const Post: React.FC<PostProps> = ({
               </IconButton>
             </>
           )}
-
         </Box>
-
       </CardContent>
     </Card>
   );

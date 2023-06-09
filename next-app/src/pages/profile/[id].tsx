@@ -15,37 +15,20 @@ import { PostContext } from "../_app";
 
 const Profile = (params: any) => {
   const user = params.user;
-  if (user) {
-    const parsedUser = JSON.parse(user);
-    const { name, email, role, surname, lastname } = parsedUser;
-    return (
-      <div style={{ maxWidth: "700px", width: "100%" }}>
-        <Stack
-          spacing={2}
-          direction={{ sm: "row" }}
-          sx={{ alignItems: "center" }}
-        >
-          <Avatar />
-          <Typography>{name}</Typography>
-          <Typography>{lastname}</Typography>
-        </Stack>
-        <ProfileTabs user={parsedUser} />
-      </div>
-    );
-  }
-  return null;
-};
-
-function ProfileTabs({ user }: any) {
-  const [posts, setPosts] = useState(user.posts);
+  const parsedUser = JSON.parse(user);
+  const [posts, setPosts] = useState(parsedUser?.posts);
   const [value, setValue] = React.useState("1");
   const { deletePostHandler, updatePostHandler } = useContext(PostContext);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   const deleteHandler = async (id: any) => {
     await deletePostHandler(id);
     setPosts((p: any) => p.filter((item: any) => item.id !== id));
   };
-  
+
   const updateHandler = async (args: any) => {
     await updatePostHandler(args);
     setPosts((p: any) => {
@@ -58,34 +41,51 @@ function ProfileTabs({ user }: any) {
     });
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Профиль" value="1" />
-            <Tab label="Посты" value="2" />
-          </TabList>
+  if (parsedUser) {
+    const { name, email, role, surname, lastname } = parsedUser;
+    return (
+      <div style={{ maxWidth: '852px', width: '100%', margin: '0 auto', marginTop:'-100px' }}>
+        <Box sx={{ typography: "body1" }} >
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", position: 'sticky', paddingTop: '20px', top: 0, zIndex: 2, backgroundColor: '#fff' }}>
+              <Stack
+                spacing={2}
+                direction={{ sm: 'column' }}
+              >
+                <Stack
+                  spacing={2}
+                  direction={{ sm: "row" }}
+                  alignItems='center'
+                >
+                  <Avatar />
+                  <Typography>{name}</Typography>
+                  <Typography>{lastname}</Typography>
+                </Stack>
+                <TabList onChange={handleChange} >
+                  <Tab label="Профиль" value="1" />
+                  <Tab label="Посты" value="2" />
+                </TabList>
+              </Stack>
+            </Box>
+            <TabPanel value="1">
+              <ProfileInfo user={parsedUser} />
+            </TabPanel>
+            <TabPanel value="2">
+              <Posts
+                posts={posts}
+                crudHidden={true}
+                deleteHandler={deleteHandler}
+                updateHandler={updateHandler}
+              />
+            </TabPanel>
+          </TabContext>
         </Box>
-        <TabPanel value="1">
-          <ProfileInfo user={user} />
-        </TabPanel>
-        <TabPanel value="2">
-          <Posts
-            posts={posts}
-            crudHidden={true}
-            deleteHandler={deleteHandler}
-            updateHandler={updateHandler}
-          />
-        </TabPanel>
-      </TabContext>
-    </Box>
-  );
-}
+      </div>
+    );
+  }
+  return null;
+};
+
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (typeof params?.id == "string") {

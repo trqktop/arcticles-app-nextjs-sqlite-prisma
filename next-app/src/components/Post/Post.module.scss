@@ -1,13 +1,15 @@
 .post {
-  min-width: 100%;
   box-sizing: border-box;
   padding: 20px;
-  max-width: 900px;
+  max-width: 890px;
+  flex: 1;
 }
+
 .header {
   padding: 0;
   margin-top: 10px;
 }
+
 .title {
   font-size: 22px;
   font-weight: 500;

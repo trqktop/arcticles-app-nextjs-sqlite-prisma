@@ -36,11 +36,7 @@ const Users = ({ data, redirect }: any) => {
   };
 
   if (session.data?.user.role === "1")
-    return (
-      <div>
-        <UserList users={state.users} deleteUserHandler={deleteUserHandler} />
-      </div>
-    );
+    return (<UserList users={state.users} deleteUserHandler={deleteUserHandler} />);
 };
 
 export default Users;
