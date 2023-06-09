@@ -2,9 +2,6 @@ import Layout from "@/components/Layout";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import * as React from 'react'
-import { useState } from 'react'
-import "../styles/global.css";
-
 
 
 type PostFormData = {

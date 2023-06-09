@@ -12,7 +12,6 @@ import { Button } from "@mui/joy";
 const Home = ({ data }: { data: string }) => {
   const [posts, setPosts] = useState<Post[]>(JSON.parse(data));
   const { deletePostHandler, updatePostHandler } = useContext(PostContext);
-  console.log(posts)
   const deleteHandler = async (id: string) => {
     const result: any = await deletePostHandler(id);
     setPosts(result.posts);
@@ -47,7 +46,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await prisma.post.findMany({
-    include: {
+    include: {  
       author: true,
       file: {
         select: {

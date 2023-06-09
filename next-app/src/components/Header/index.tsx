@@ -9,10 +9,12 @@ const Header = () => {
       style={{
         display: "flex",
         position: 'sticky',
+        margin: 'auto',
         top: 30,
         justifyContent: "space-between",
         maxWidth: "1440px",
         width: "100%",
+        zIndex: 1
       }}
     >
       <Logo />

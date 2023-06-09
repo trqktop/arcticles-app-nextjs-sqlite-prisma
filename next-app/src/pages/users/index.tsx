@@ -19,7 +19,6 @@ type PostFormData = {
 
 const Users = ({ data, redirect }: any) => {
   const session = useSession();
-
   const [state, setState] = useState({
     users: JSON.parse(data),
   });

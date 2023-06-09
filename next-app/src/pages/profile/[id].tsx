@@ -45,7 +45,7 @@ function ProfileTabs({ user }: any) {
     await deletePostHandler(id);
     setPosts((p: any) => p.filter((item: any) => item.id !== id));
   };
-
+  
   const updateHandler = async (args: any) => {
     await updatePostHandler(args);
     setPosts((p: any) => {
@@ -95,7 +95,20 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
       include: {
         posts: {
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
           where: { published: true },
+          include: {
+            file: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
         },
       },
     });

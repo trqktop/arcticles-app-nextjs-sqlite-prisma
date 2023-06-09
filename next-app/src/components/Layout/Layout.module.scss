@@ -3,9 +3,12 @@
   flex: 1;
   justify-content: center;
 }
+
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 30px;
+  max-width: 1440px;
+  margin: auto;
+  padding: 22px;
 }

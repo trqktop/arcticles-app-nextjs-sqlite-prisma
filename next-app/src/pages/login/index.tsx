@@ -1,6 +1,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Layout } from "antd";
+import { Box, Card, Typography } from "@mui/joy";
 type FormData = {
   email: string;
   password: string;
@@ -23,46 +24,47 @@ const Login = () => {
   };
 
   return (
-    <div style={{ margin: "auto" }}>
+    <Card style={{ margin: "auto" }} >
       <Form
         disabled={loading}
+        size='large'
+        layout='vertical'
         name="login"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        labelCol={{ span: 7 }}
+        autoComplete="off"
         onFinish={submitHandler}
       >
         <Form.Item
-          label="Email"
-          hasFeedback
+          label={<Typography level='body1'>Почта</Typography>}
+          // hasFeedback
           name="email"
           help={errorStatus ? "Неверный логин или пароль" : null}
-          rules={[
-            {
-              required: true,
-              type: "email",
-              message: "Поле должно быть формата name@domen.ru",
-            },
-          ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     type: "email",
+        //     message: "Поле должно быть формата name@domen.ru",
+        //   },
+        // ]}
         >
           <Input status={errorStatus} />
         </Form.Item>
         <Form.Item
-          label="password"
+          label={<Typography level='body1'>Пароль</Typography>}
           name="password"
-          hasFeedback
+          // hasFeedback
           help={errorStatus ? "Неверный логин или пароль" : null}
-          rules={[{ required: true, message: "Обязательное поле" }]}
+        // rules={[{ required: true, message: "Обязательное поле" }]}
         >
           <Input.Password status={errorStatus} />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item >
           <Button loading={loading} type="primary" htmlType="submit">
-            Submit
+            Войти
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 };
 

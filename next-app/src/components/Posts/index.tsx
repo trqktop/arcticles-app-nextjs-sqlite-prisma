@@ -14,20 +14,17 @@ const Posts = ({ posts, crudHidden, deleteHandler, updateHandler }: any) => {
     <>
       <List
         sx={{
-          minWidth: "100%",
-          width: "100%",
           bgcolor: "background.paper",
-          display: "flex",
-          flexDirection: "column",
-          rowGap: "80px",
+          display: 'flex', flexDirection: 'column', gap: '22px',
+          minWidth: '100%'
         }}
       >
         {posts.map((item: any) => (
-          <ListItem key={item.id} sx={{ maxWidth: "780px", margin: "auto" }}>
+          <ListItem key={item.id} style={{ padding: 0, display: 'flex', flexDirection: 'column',  minWidth: '100%' }}>
             <Post data={item} crudHidden={crudHidden} deleteHandler={deleteHandler} updateHandler={updateHandler} />
           </ListItem>
         ))}
-      </List>
+      </List >
     </>
   );
 };

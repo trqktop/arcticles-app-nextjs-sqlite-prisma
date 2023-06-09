@@ -107,7 +107,7 @@ const Post: React.FC<PostProps> = ({
   };
 
   return (
-    <Card className={styles.post}>
+    <Card className={styles.post} >
       <CardHeader
         className={styles.header}
         action={

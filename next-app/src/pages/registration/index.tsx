@@ -1,4 +1,5 @@
-import { Button, Form, Input, Select } from "antd";
+import { Card, Typography } from "@mui/joy";
+import { Button, DatePicker, Form, Input, Select } from "antd";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 
@@ -9,7 +10,6 @@ type FormData = {
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
-
   const submitHandler = async (form: FormData) => {
     setLoading(true);
     const { email, password } = form;
@@ -28,21 +28,32 @@ const Registration = () => {
       });
     });
   };
-
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 7 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 30 },
+    },
+  };
   return (
-    <div style={{ margin: "auto" }}>
+    <Card style={{ margin: "auto" }} size='sm'>
       <Form
+        {...formItemLayout}
+        size='middle'
         disabled={loading}
         name="registration"
-        labelCol={{ span: 8 }}
+        // labelCol={{ span: 8 }}
         layout="horizontal"
-        wrapperCol={{ span: 16 }}
+        // wrapperCol={{ span: 16 }}
         // style={{ maxWidth: 600 }}
         onFinish={submitHandler}
         autoComplete="off"
       >
         <Form.Item
-          label="Email"
+          label={<Typography fontSize={14} level='body1'>Почта</Typography>}
           name="email"
           hasFeedback
           rules={[
@@ -56,7 +67,7 @@ const Registration = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="password"
+          label={<Typography fontSize={14} level='body1'>Пароль</Typography>}
           name="password"
           hasFeedback
           rules={[
@@ -72,13 +83,13 @@ const Registration = () => {
         </Form.Item>
 
         <Form.Item
-          label="surname"
+          label={<Typography fontSize={14} level='body1'>Отчество</Typography>}
           name="surname"
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Фамилия должна содержать от 2 до 16 символов",
+              message: "Фамилия должна быть от 2 до 16 символов",
               min: 2,
               max: 16,
             },
@@ -87,8 +98,11 @@ const Registration = () => {
           <Input />
         </Form.Item>
 
+
+
+
         <Form.Item
-          label="name"
+          label={<Typography fontSize={14} level='body1'>Имя</Typography>}
           name="name"
           hasFeedback
           rules={[
@@ -105,8 +119,8 @@ const Registration = () => {
 
         <Form.Item
           hasFeedback
-          label="lastname"
           name="lastname"
+          label={<Typography fontSize={14} level='body1'>Фамилия</Typography>}
           rules={[
             {
               message: "Отчество должно содержать от 2 до 16 символов",
@@ -120,8 +134,8 @@ const Registration = () => {
 
         <Form.Item
           hasFeedback
-          label="serial"
           name="serial"
+          label={<Typography fontSize={14} level='body1'>Серия</Typography>}
           rules={[
             {
               message: "Серия должна содержать от 4 до 10 символов",
@@ -135,7 +149,7 @@ const Registration = () => {
 
         <Form.Item
           hasFeedback
-          label="номер"
+          label={<Typography fontSize={14} level='body1'>Номер</Typography>}
           name="number"
           rules={[
             {
@@ -148,27 +162,35 @@ const Registration = () => {
           <Input />
         </Form.Item>
 
-        <Form.Item hasFeedback label="role" name="role" initialValue={"1"}>
+        <Form.Item
+       label={<Typography fontSize={14} level='body1'>Дата</Typography>}
+          name="date"
+          hasFeedback
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item hasFeedback label={<Typography fontSize={14} level='body1'>Роль</Typography>} name="role" initialValue={"1"}>
           <Select
             options={[
               {
                 value: "1",
-                label: "admin",
+                label: <Typography fontSize={14} level='body1'>Админ</Typography>
               },
               {
                 value: "2",
-                label: "user",
+                label: <Typography fontSize={14} level='body1'>Пользователь</Typography>
               },
             ]}
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item >
           <Button loading={loading} type="primary" htmlType="submit">
-            Submit
+            Зарегистрироваться
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card >
   );
 };
 

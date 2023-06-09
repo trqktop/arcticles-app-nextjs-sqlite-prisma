@@ -22,11 +22,12 @@ const User = ({ deleteUserHandler, data }: any) => {
     deleteUserHandler(data.id)
   }
   const isCurrentUser = session && session.data?.user.id === data.id;
-  const confirm = (e: any) => {
+  const confirm = async (e: any) => {
     deleteUserHandler(data.id)
-    signOut()
-    if (isCurrentUser)
+    if (isCurrentUser) {
+      await signOut()
       route.push('/')
+    }
   };
 
 
@@ -39,16 +40,16 @@ const User = ({ deleteUserHandler, data }: any) => {
           sx={{ justifyContent: "flex-end" }}
         >
           {/* <IconButton color="primary" sx={{ padding: 0 }}> */}
-            <Popconfirm
-              title="Удалить аккаунт?"
-              description="Вы уверены что хотите удалить аккаунт? Все данные будут утрачены."
-              onConfirm={(e) => confirm(e)}
-              okText="Удалить"
-              cancelText="Отменить"
-              placement='bottom'
-            >
-              <Button size='small' danger>Удалить аккаунт</Button>
-            </Popconfirm >
+          <Popconfirm
+            title="Удалить аккаунт?"
+            description="Вы уверены что хотите удалить аккаунт? Все данные будут утрачены."
+            onConfirm={(e) => confirm(e)}
+            okText="Удалить"
+            cancelText="Отменить"
+            placement='bottom'
+          >
+            <Button size='small' danger>Удалить аккаунт</Button>
+          </Popconfirm >
           {/* </IconButton> */}
         </CardActions>
         <ProfileInfo user={data} />

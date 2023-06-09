@@ -58,6 +58,7 @@ const CrudForm = ({
     },
     multiple: false,
     maxCount: 1,
+    accept: '.pdf',
     fileList,
   };
 
@@ -104,6 +105,17 @@ const CrudForm = ({
       setOpen(false);
     }
     setFileList([])
+  };
+
+  const validatePDF = (rule: any, value: any) => {
+    const file = value && value.file;
+    if (file) {
+      const isPDF = file.type === 'application/pdf';
+      if (!isPDF) {
+        return Promise.reject('You can only upload PDF files!');
+      }
+    }
+    return Promise.resolve();
   };
 
   if (session.data?.user.role === "1")
@@ -159,10 +171,10 @@ const CrudForm = ({
               </Form.Item>
               <Form.Item name="dataFile" style={{ display: 'flex', alignItems: 'center' }}>
                 <Upload  {...props}>
-                  <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} icon={<UploadOutlined sx={{ fontSize: '16px' }} />}>Select File</Button>
+                  <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} icon={<UploadOutlined sx={{ fontSize: '16px' }} />}>PDF</Button>
                 </Upload>
               </Form.Item>
-              <Form.Item style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Form.Item style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <Button type="primary" htmlType="submit">
                   Сохранить
                 </Button>

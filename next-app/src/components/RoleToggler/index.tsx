@@ -2,12 +2,13 @@ import { Button } from "@mui/base";
 import { MenuItem, Switch, Typography } from "@mui/joy";
 import { ListItemIcon } from "@mui/material";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const RoleToggler = () => {
   const session = useSession();
   const [isAdmin, setAdmin] = useState(false);
-
+  const router = useRouter()
   useEffect(() => {
     setAdmin(session.data?.user.role !== "1");
   }, [session.data?.user.role]);
@@ -31,6 +32,7 @@ const RoleToggler = () => {
           callbackUrl: "/",
           redirect: false,
         });
+        router.push('/')
       } catch (error) {
         console.log(error);
       }
