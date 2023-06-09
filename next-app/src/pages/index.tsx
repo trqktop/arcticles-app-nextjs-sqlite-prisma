@@ -7,11 +7,12 @@ import CrudForm from "@/components/CrudForm";
 import { Add } from "@mui/icons-material";
 import { PostContext } from "./_app";
 import { Post } from "@/types";
+import { Button } from "@mui/joy";
 
 const Home = ({ data }: { data: string }) => {
   const [posts, setPosts] = useState<Post[]>(JSON.parse(data));
   const { deletePostHandler, updatePostHandler } = useContext(PostContext);
-console.log(posts)
+  console.log(posts)
   const deleteHandler = async (id: string) => {
     const result: any = await deletePostHandler(id);
     setPosts(result.posts);
@@ -23,15 +24,14 @@ console.log(posts)
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", }}>
         <CrudForm
-          title="Создать пост"
+          title="Новая статья"
           icon={<Add />}
           updateHandler={updateHandler}
           type="create"
         />
       </div>
-
       {posts && (
         <Posts
           posts={posts}

@@ -11,6 +11,7 @@ import Logout from "@mui/icons-material/Logout";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import RoleToggler from "../RoleToggler";
+import { Typography } from "@mui/material";
 
 const Profile = () => {
   const route = useRouter();
@@ -36,7 +37,7 @@ const Profile = () => {
         <Box
           sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
         >
-          <Tooltip title="user profile">
+          <Tooltip title="Профиль">
             <IconButton
               onClick={handleClick}
               size="small"
@@ -88,7 +89,7 @@ const Profile = () => {
             onClick={() => route.push(`/profile/${session.data.user.id}`)}
           >
             <Avatar />
-            {session.data.user.email}
+            <Typography> {session.data.user.name}</Typography>
           </MenuItem>
           <Divider />
           <MenuItem>

@@ -9,7 +9,7 @@ const UserListLink = () => {
   const session = useSession();
   if (session.data?.user.role === "1")
     return (
-      <Tooltip title="user list">
+      <Tooltip title="Список пользователей">
         <IconButton color="primary" onClick={() => router.push("/users")}>
           <GroupIcon />
         </IconButton>

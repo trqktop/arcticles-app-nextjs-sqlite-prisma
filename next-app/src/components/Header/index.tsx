@@ -8,6 +8,8 @@ const Header = () => {
     <header
       style={{
         display: "flex",
+        position: 'sticky',
+        top: 30,
         justifyContent: "space-between",
         maxWidth: "1440px",
         width: "100%",

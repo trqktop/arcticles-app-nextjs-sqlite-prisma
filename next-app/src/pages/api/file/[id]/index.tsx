@@ -22,4 +22,12 @@ export default async function handler(
     })
     res.status(200).json(id)
   }
+  if (req.method === "DELETE") {
+    await prisma.file.delete({
+      where: {
+        id,
+      },
+    });
+    res.status(200).json('success');
+  }
 }

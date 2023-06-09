@@ -12,7 +12,7 @@ import { Tooltip } from "@mui/joy";
 import React from "react";
 import ProfileInfo from "../ProfileInfo";
 import { signOut, useSession } from "next-auth/react";
-import { Popconfirm } from "antd";
+import { Button, Popconfirm } from "antd";
 import { useRouter } from "next/router";
 
 const User = ({ deleteUserHandler, data }: any) => {
@@ -21,14 +21,15 @@ const User = ({ deleteUserHandler, data }: any) => {
   const deleteHandler = () => {
     deleteUserHandler(data.id)
   }
-
+  const isCurrentUser = session && session.data?.user.id === data.id;
   const confirm = (e: any) => {
     deleteUserHandler(data.id)
     signOut()
-    route.push('/')
+    if (isCurrentUser)
+      route.push('/')
   };
 
-  const isCurrentUser = session && session.data?.user.id === data.id;
+
   return (
     <Card sx={{ width: "100%" }}>
       <CardContent>
@@ -37,20 +38,18 @@ const User = ({ deleteUserHandler, data }: any) => {
           // onClick={deleteHandler}
           sx={{ justifyContent: "flex-end" }}
         >
-          {isCurrentUser ? <IconButton color="primary" sx={{ padding: 0 }}>
+          {/* <IconButton color="primary" sx={{ padding: 0 }}> */}
             <Popconfirm
-              title="Удалить аккаунт"
-              description="Это вы. Если вы удалите свой аккаунт вы будете будете выброшены на главную"
+              title="Удалить аккаунт?"
+              description="Вы уверены что хотите удалить аккаунт? Все данные будут утрачены."
               onConfirm={(e) => confirm(e)}
               okText="Удалить"
               cancelText="Отменить"
               placement='bottom'
             >
-              <DeleteIcon />
+              <Button size='small' danger>Удалить аккаунт</Button>
             </Popconfirm >
-          </IconButton> :
-            <IconButton color="primary" sx={{ padding: 0 }}> <DeleteIcon onClick={deleteHandler} /></IconButton>
-          }
+          {/* </IconButton> */}
         </CardActions>
         <ProfileInfo user={data} />
 

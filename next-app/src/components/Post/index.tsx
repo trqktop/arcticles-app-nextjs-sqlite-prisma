@@ -1,5 +1,6 @@
+import React from "react";
 import {
-  // Typography,
+  Typography,
   Card,
   CardHeader,
   IconButton,
@@ -8,43 +9,58 @@ import {
   CardContent,
   CardActions,
   Grid,
+  Button,
 } from "@mui/material";
+import { Button as AntdButton, Upload } from "antd";
 import NextLink from "next/link";
-import Typography from "@mui/joy/Typography";
 import { Box, Divider, Link, Stack, Tooltip } from "@mui/joy";
-import React, { useContext } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSession } from "next-auth/react";
 import CrudForm from "../CrudForm";
 import { PostContext } from "@/pages/_app";
-
 import styles from "./Post.module.scss";
 import DateComponent from "../DateComponent";
-import { Button } from "antd";
+import { Download, UploadOutlined } from "@mui/icons-material";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import { CloseOutlined } from "@ant-design/icons";
 
-const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
+interface PostProps {
+  data: any;
+  crudHidden: boolean;
+  deleteHandler: (id: number) => void;
+  updateHandler: (id: number) => void;
+}
+
+const Post: React.FC<PostProps> = ({
+  data,
+  crudHidden,
+  deleteHandler,
+  updateHandler,
+}) => {
   const deletePost = async () => {
     deleteHandler(data.id);
   };
 
   const downloadPDF = () => {
-    fetch(`/api/file/${data.file.id}`).then(res => res.json()).then(res => {
-      const { content } = res
-      const byteCharacters = atob(content);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: "application/pdf" });
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = data.file.name;
-      link.click();
-    })
+    fetch(`/api/file/${data.file.id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const { content } = res;
+        const byteCharacters = atob(content);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = data.file.name;
+        link.click();
+      });
   };
- 
+
   const ButtonGroup = () => {
     const session = useSession();
     if (session?.data?.user?.role === "1") {
@@ -71,44 +87,37 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
   const AuthorLink = ({ author, crudHidden }: any) => {
     if (author)
       return (
-        <NextLink
-          href={`profile/${author.id}`}
-          style={{
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <Avatar sizes="sm" sx={{ width: "16px", height: "16px" }} />
-          <Typography sx={{ fontSize: "14px", color: "#1976d2" }}>
-            {author.name}
-          </Typography>
+        <NextLink href={`profile/${author.id}`} passHref style={{
+          textDecoration: "none",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontSize: "14px",
+          color: "#1976d2",
+        }}>
+          <Avatar
+            sizes="sm"
+            sx={{ width: "16px", height: "16px" }}
+            src={author.avatar}
+          />
+          <Typography>{author.name}</Typography>
         </NextLink>
       );
     return null;
   };
-
-
-
-
-
-
 
   return (
     <Card className={styles.post}>
       <CardHeader
         className={styles.header}
         action={
-          (
-            <CardActions disableSpacing>
-              <ButtonGroup />
-            </CardActions>
-          )
+          <Box sx={{ display: "flex" }}>
+            <ButtonGroup />
+          </Box>
         }
         title={
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -118,35 +127,50 @@ const Post = ({ data, crudHidden, deleteHandler, updateHandler }: any) => {
             }}
           >
             <AuthorLink author={data.author} crudHidden={crudHidden} />
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                alignItems: "center",
-                flexWrap: "wrap",
-                justifyContent: "flex-end",
-              }}
-            >
-              <DateComponent title="Дата создания" date={data.createdAt} />
-              <Divider orientation="vertical" sx={{ height: "16px" }} />
-              <DateComponent
-                title="Дата последнего обновления"
-                date={data.updatedAt}
-              />
-            </div>
-          </div>
+          </Box>
         }
       />
       <CardContent sx={{ padding: 0, marginTop: "15px" }}>
-        <Typography sx={{ fontSize: 24, fontWeight: "bold" }} level="h1">
+        <Typography sx={{ fontSize: 24, fontWeight: "bold", marginBottom: '8px' }} variant="h1">
           {data.title}
         </Typography>
-        <Typography level="body1" fontSize="sm" sx={{ paddingBottom: "16px" }}>
+        <Typography
+          variant="body1"
+          fontSize="sm"
+          sx={{ paddingBottom: "16px" }}
+        >
           {data.content}
         </Typography>
-        <Button onClick={downloadPDF} type="primary">
-          Скачать PDF
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              flexWrap: "wrap",
+              width: '100%',
+              margin: 'auto',
+              height: 'min-content'
+            }}
+          >
+            <DateComponent title="Создано:" date={data.createdAt} />
+            <Divider orientation="vertical" sx={{ height: "16px" }} />
+            <DateComponent
+              title="Обновлено:"
+              date={data.updatedAt}
+            />
+          </Box>
+          {data.file && (
+            <>
+              <IconButton color="primary" onClick={downloadPDF}>
+                <Typography variant='body2'> {data.file.name}</Typography>
+                <Download sx={{ fontSize: '24px', marginLeft: '8px' }} />
+              </IconButton>
+            </>
+          )}
+
+        </Box>
+
       </CardContent>
     </Card>
   );

@@ -42,7 +42,24 @@ const CrudForm = ({
   const [open, setOpen] = React.useState<boolean>(false);
   const postTitle = type === "update" ? data.title : "";
   const postContent = type === "update" ? data.content : "";
+  const [fileList, setFileList] = React.useState<UploadFile[]>([]);
 
+
+  const props: UploadProps = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setFileList([file]);
+      return false;
+    },
+    multiple: false,
+    maxCount: 1,
+    fileList,
+  };
 
 
   const onFinish = async ({
@@ -86,6 +103,7 @@ const CrudForm = ({
       });
       setOpen(false);
     }
+    setFileList([])
   };
 
   if (session.data?.user.role === "1")
@@ -96,12 +114,15 @@ const CrudForm = ({
             {icon}
           </IconButton>
         </Tooltip>
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <ModalDialog style={{ maxWidth: 600 }}>
+        <Modal open={open} onClose={() => {
+          setFileList([])
+          setOpen(false)
+        }}>
+          <ModalDialog style={{ width: '600px' }}>
             <Form
+              size="large"
               name="curd"
               layout="vertical"
-              style={{ maxWidth: 600 }}
               onFinish={onFinish}
             >
               <Form.Item
@@ -111,20 +132,15 @@ const CrudForm = ({
                 initialValue={postTitle}
                 rules={[
                   {
-                    message: "Минимальное количество символов 5",
+                    message: "Количество символов от 5 до 200",
                     min: 5,
-                    required: true,
-                  },
-                  {
                     max: 200,
-                    message: "Максимаьное количество символов 200",
                     required: true,
                   },
                 ]}
               >
                 <Input />
               </Form.Item>
-
               <Form.Item
                 hasFeedback
                 label="Статья"
@@ -132,28 +148,24 @@ const CrudForm = ({
                 initialValue={postContent}
                 rules={[
                   {
-                    message: "Минимальное количество символов 10",
+                    message: "Количество символов  от 10 до 500",
                     min: 10,
                     required: true,
-                  },
-                  {
                     max: 500,
-                    message: "Максимаьное количество символов 500",
-                    required: true,
                   },
                 ]}
               >
                 <TextArea rows={3} />
               </Form.Item>
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Form.Item name="dataFile" style={{ display: 'flex', alignItems: 'center' }}>
+                <Upload  {...props}>
+                  <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} icon={<UploadOutlined sx={{ fontSize: '16px' }} />}>Select File</Button>
+                </Upload>
+              </Form.Item>
+              <Form.Item style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Button type="primary" htmlType="submit">
                   Сохранить
                 </Button>
-              </Form.Item>
-              <Form.Item name="dataFile">
-                <Upload beforeUpload={() => false} fileList={[]} multiple={false} maxCount={1}>
-                  <Button icon={<UploadOutlined />}>Select File</Button>
-                </Upload>
               </Form.Item>
             </Form>
           </ModalDialog>
