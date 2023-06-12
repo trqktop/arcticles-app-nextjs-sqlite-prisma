@@ -114,7 +114,7 @@ const LoginForm = () => {
             >
               <Stack spacing={2}>
                 <FormControl>
-                  <FormLabel>email</FormLabel>
+                  <FormLabel>Почта</FormLabel>
                   <Input
                     error={error}
                     autoFocus
@@ -124,7 +124,7 @@ const LoginForm = () => {
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel>password</FormLabel>
+                  <FormLabel>Пароль</FormLabel>
                   <Input
                     error={error}
                     required
@@ -133,7 +133,7 @@ const LoginForm = () => {
                     onChange={handlePasswordChange}
                   />
                 </FormControl>
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Войти</Button>
               </Stack>
             </form>
           </ModalDialog>

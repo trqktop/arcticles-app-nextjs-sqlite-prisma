@@ -3,9 +3,10 @@ import { Typography } from "@mui/joy";
 const DateComponent = ({ date, title }: { date: string; title: string }) => {
   const getFormatedDate = () => {
     const formatedDate = new Date(date);
-    return `${formatedDate.getDate()}.${
-      formatedDate.getMonth() + 1
-    }.${formatedDate.getFullYear()} ${formatedDate.getHours()}:${formatedDate.getSeconds()}`;
+    const day = formatedDate.getDate().toString().padStart(2, '0');
+    const month = (formatedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = formatedDate.getFullYear().toString();
+    return `${day}-${month}-${year}`;
   };
 
   return (

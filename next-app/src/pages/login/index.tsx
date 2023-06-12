@@ -24,39 +24,25 @@ const Login = () => {
   };
 
   return (
-    <Card style={{ margin: "auto" }} >
+    <Card style={{ margin: "auto", width: '320px' }} >
       <Form
         disabled={loading}
         size='large'
-        layout='vertical'
         name="login"
-        labelCol={{ span: 7 }}
         autoComplete="off"
         onFinish={submitHandler}
       >
         <Form.Item
-          label={<Typography level='body1'>Почта</Typography>}
-          // hasFeedback
           name="email"
           help={errorStatus ? "Неверный логин или пароль" : null}
-        // rules={[
-        //   {
-        //     required: true,
-        //     type: "email",
-        //     message: "Поле должно быть формата name@domen.ru",
-        //   },
-        // ]}
         >
-          <Input status={errorStatus} />
+          <Input placeholder="Почта" status={errorStatus} />
         </Form.Item>
         <Form.Item
-          label={<Typography level='body1'>Пароль</Typography>}
           name="password"
-          // hasFeedback
           help={errorStatus ? "Неверный логин или пароль" : null}
-        // rules={[{ required: true, message: "Обязательное поле" }]}
         >
-          <Input.Password status={errorStatus} />
+          <Input.Password placeholder="Пароль" status={errorStatus} />
         </Form.Item>
         <Form.Item >
           <Button loading={loading} type="primary" htmlType="submit">

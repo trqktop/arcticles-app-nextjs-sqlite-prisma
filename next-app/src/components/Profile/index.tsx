@@ -100,7 +100,7 @@ const Profile = () => {
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
-            Logout
+            Выйти
           </MenuItem>
         </Menu>
       </div>

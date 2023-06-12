@@ -44,7 +44,7 @@ const Profile = (params: any) => {
   if (parsedUser) {
     const { name, email, role, surname, lastname } = parsedUser;
     return (
-      <div style={{ maxWidth: '852px', width: '100%', margin: '0 auto', marginTop:'-100px' }}>
+      <div style={{ maxWidth: '852px', width: '100%', margin: '0 auto', marginTop: '-100px' }}>
         <Box sx={{ typography: "body1" }} >
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider", position: 'sticky', paddingTop: '20px', top: 0, zIndex: 2, backgroundColor: '#fff' }}>
@@ -67,10 +67,10 @@ const Profile = (params: any) => {
                 </TabList>
               </Stack>
             </Box>
-            <TabPanel value="1">
+            <TabPanel value="1" style={{ paddingLeft: 0, paddingTop: '60px' }}>
               <ProfileInfo user={parsedUser} />
             </TabPanel>
-            <TabPanel value="2">
+            <TabPanel value="2" style={{ paddingLeft: 0, paddingRight: 0 }}>
               <Posts
                 posts={posts}
                 crudHidden={true}

@@ -35,6 +35,7 @@ const CrudForm = ({
   icon: any;
   type: string;
   title: string;
+  text?: string,
   data?: any;
   updateHandler: any;
 }) => {
@@ -107,16 +108,16 @@ const CrudForm = ({
     setFileList([])
   };
 
-  const validatePDF = (rule: any, value: any) => {
-    const file = value && value.file;
-    if (file) {
-      const isPDF = file.type === 'application/pdf';
-      if (!isPDF) {
-        return Promise.reject('You can only upload PDF files!');
-      }
-    }
-    return Promise.resolve();
-  };
+  // const validatePDF = (rule: any, value: any) => {
+  //   const file = value && value.file;
+  //   if (file) {
+  //     const isPDF = file.type === 'application/pdf';
+  //     if (!isPDF) {
+  //       return Promise.reject('You can only upload PDF files!');
+  //     }
+  //   }
+  //   return Promise.resolve();
+  // };
 
   if (session.data?.user.role === "1")
     return (
@@ -171,7 +172,7 @@ const CrudForm = ({
               </Form.Item>
               <Form.Item name="dataFile" style={{ display: 'flex', alignItems: 'center' }}>
                 <Upload  {...props}>
-                  <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} icon={<UploadOutlined sx={{ fontSize: '16px' }} />}>PDF</Button>
+                  <Button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} icon={<UploadOutlined sx={{ fontSize: '16px' }} />}>Прикрепить PDF</Button>
                 </Upload>
               </Form.Item>
               <Form.Item style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>

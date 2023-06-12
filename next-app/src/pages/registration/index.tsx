@@ -28,34 +28,20 @@ const Registration = () => {
       });
     });
   };
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 7 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 30 },
-    },
-  };
+
   return (
     <Card style={{ margin: "auto" }} size='sm'>
       <Form
-        {...formItemLayout}
         size='middle'
         disabled={loading}
         name="registration"
-        // labelCol={{ span: 8 }}
         layout="horizontal"
-        // wrapperCol={{ span: 16 }}
-        // style={{ maxWidth: 600 }}
         onFinish={submitHandler}
+        style={{ width: '320px' }}
         autoComplete="off"
       >
         <Form.Item
-          label={<Typography fontSize={14} level='body1'>Почта</Typography>}
           name="email"
-          hasFeedback
           rules={[
             {
               required: true,
@@ -64,12 +50,10 @@ const Registration = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Почта *" />
         </Form.Item>
         <Form.Item
-          label={<Typography fontSize={14} level='body1'>Пароль</Typography>}
           name="password"
-          hasFeedback
           rules={[
             {
               required: true,
@@ -79,32 +63,10 @@ const Registration = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Пароль *" />
         </Form.Item>
-
         <Form.Item
-          label={<Typography fontSize={14} level='body1'>Отчество</Typography>}
-          name="surname"
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: "Фамилия должна быть от 2 до 16 символов",
-              min: 2,
-              max: 16,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-
-
-
-        <Form.Item
-          label={<Typography fontSize={14} level='body1'>Имя</Typography>}
           name="name"
-          hasFeedback
           rules={[
             {
               required: true,
@@ -114,13 +76,23 @@ const Registration = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Имя *" />
         </Form.Item>
-
         <Form.Item
-          hasFeedback
+          name="surname"
+          rules={[
+            {
+              required: true,
+              message: "Фамилия должна быть от 2 до 16 символов",
+              min: 2,
+              max: 16,
+            },
+          ]}
+        >
+          <Input placeholder="Фамилия *" />
+        </Form.Item>
+        <Form.Item
           name="lastname"
-          label={<Typography fontSize={14} level='body1'>Фамилия</Typography>}
           rules={[
             {
               message: "Отчество должно содержать от 2 до 16 символов",
@@ -129,13 +101,10 @@ const Registration = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Отчество" />
         </Form.Item>
-
         <Form.Item
-          hasFeedback
           name="serial"
-          label={<Typography fontSize={14} level='body1'>Серия</Typography>}
           rules={[
             {
               message: "Серия должна содержать от 4 до 10 символов",
@@ -144,12 +113,9 @@ const Registration = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Серия" />
         </Form.Item>
-
         <Form.Item
-          hasFeedback
-          label={<Typography fontSize={14} level='body1'>Номер</Typography>}
           name="number"
           rules={[
             {
@@ -159,19 +125,16 @@ const Registration = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Номер" />
         </Form.Item>
-
         <Form.Item
-       label={<Typography fontSize={14} level='body1'>Дата</Typography>}
           name="date"
-          hasFeedback
         >
-          <DatePicker />
+          <DatePicker placeholder="Дата" />
         </Form.Item>
-
-        <Form.Item hasFeedback label={<Typography fontSize={14} level='body1'>Роль</Typography>} name="role" initialValue={"1"}>
+        <Form.Item name="role" initialValue={"1"}>
           <Select
+            placeholder='Роль'
             options={[
               {
                 value: "1",

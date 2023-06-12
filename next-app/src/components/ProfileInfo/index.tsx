@@ -32,12 +32,6 @@ const ProfileInfo = ({ user }: any) => {
 
   return (
     <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Параметр</TableCell>
-          <TableCell>Значение</TableCell>
-        </TableRow>
-      </TableHead>
       <TableBody>
         {labels.map(({ primary, secondary }, index) => {
           let data = user[primary];
@@ -49,11 +43,11 @@ const ProfileInfo = ({ user }: any) => {
               data = user[primary] === "1" ? "Админ" : "Пользователь";
             }
             return (
-              <TableRow key={index}>
-                <TableCell>
-                  <Typography variant="subtitle1">{secondary}</Typography>
+              <TableRow key={index} style={{ display: 'flex' }}>
+                <TableCell style={{ width: '134px', border: 'none' }} >
+                  <Typography style={{ color: 'gray' }} variant="subtitle1">{secondary}</Typography>
                 </TableCell>
-                <TableCell>{data}</TableCell>
+                <TableCell style={{ width: '134px', border: 'none' }}>{data}</TableCell>
               </TableRow>
             );
           } else {

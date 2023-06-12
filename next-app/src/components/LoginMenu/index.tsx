@@ -44,10 +44,10 @@ export default function LoginMenu() {
           placement="bottom-end"
         >
           <MenuItem onClick={() => router.push("/login")}>
-            <Typography>Login</Typography>
+            <Typography>Войти</Typography>
           </MenuItem>
           <MenuItem onClick={() => router.push("/registration")}>
-            <Typography>Registration</Typography>
+            <Typography>Регистрация</Typography>
           </MenuItem>
           <ListDivider />
         </Menu>

@@ -5,7 +5,7 @@ import logo from '../../../public/pngwing.com.png'
 const Logo = () => {
   return (
     <Link href="/">
-      <Image src={logo} alt="logo" width={40} />
+      <Image priority src={logo} alt="logo" width={40} />
       {/* <LogoDevOutlinedIcon fontSize="large" color="primary" /> */}
     </Link>
   );

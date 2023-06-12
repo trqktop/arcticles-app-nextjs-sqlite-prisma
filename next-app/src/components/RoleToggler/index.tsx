@@ -43,8 +43,8 @@ const RoleToggler = () => {
     <Switch
       onChange={toggleRole}
       checked={isAdmin}
-      startDecorator={<Typography>Admin</Typography>}
-      endDecorator={<Typography>User</Typography>}
+      startDecorator={<Typography>Админ</Typography>}
+      endDecorator={<Typography>Пользователь</Typography>}
     />
   );
 };
