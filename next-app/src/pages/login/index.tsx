@@ -1,15 +1,19 @@
 import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { Form, Input, Button, Layout } from "antd";
-import { Box, Card, Typography } from "@mui/joy";
+import { memo, useCallback, useState } from "react";
+import { Form, Input, Button } from "antd";
+import { Card } from "@mui/joy";
+import type InputProps from "@mui/joy";
 type FormData = {
   email: string;
   password: string;
 };
+type ErrorStatus = "" | "warning" | "error" | undefined;
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [errorStatus, setError] = useState<any>("");
-  const submitHandler = async (form: FormData) => {
+  const [errorStatus, setError] = useState<ErrorStatus>("");
+
+  const submitHandler = useCallback(async (form: FormData) => {
     setLoading(true);
     await signIn("credentials", {
       redirect: false,
@@ -21,13 +25,13 @@ const Login = () => {
       }
       setLoading(false);
     });
-  };
+  }, []);
 
   return (
-    <Card style={{ margin: "auto", width: '320px' }} >
+    <Card style={{ margin: "auto", width: "320px" }}>
       <Form
         disabled={loading}
-        size='large'
+        size="large"
         name="login"
         autoComplete="off"
         onFinish={submitHandler}
@@ -44,7 +48,7 @@ const Login = () => {
         >
           <Input.Password placeholder="Пароль" status={errorStatus} />
         </Form.Item>
-        <Form.Item >
+        <Form.Item>
           <Button loading={loading} type="primary" htmlType="submit">
             Войти
           </Button>
@@ -54,4 +58,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default memo(Login);

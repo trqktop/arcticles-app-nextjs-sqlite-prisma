@@ -1,12 +1,7 @@
-import { breadcrumbsClasses } from "@mui/material";
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export const config = {
-  api: {
-    bodyParser: { sizeLimit: "25mb" },
-  },
-};
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,15 +19,7 @@ export default async function handler(
           },
         });
         const posts = await prisma.post.findMany({
-          include: {
-            author: true,
-            file: {
-              select: {
-                id: true,
-                name: true
-              }
-            }
-          },
+          include: { author: true },
           orderBy: [
             {
               createdAt: "desc",
@@ -63,9 +50,9 @@ export default async function handler(
             file: {
               select: {
                 id: true,
-                name: true
-              }
-            }
+                name: true,
+              },
+            },
           },
           orderBy: [
             {
@@ -87,7 +74,6 @@ export default async function handler(
       break;
     case "PUT":
       try {
-
         try {
           await prisma.post.create({
             data: req.body,
@@ -102,9 +88,9 @@ export default async function handler(
             file: {
               select: {
                 id: true,
-                name: true
-              }
-            }
+                name: true,
+              },
+            },
           },
           orderBy: [
             {

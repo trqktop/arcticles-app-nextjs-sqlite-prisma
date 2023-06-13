@@ -1,29 +1,20 @@
-import Content from "@/components/Content";
-import Header from "@/components/Header";
-import { GetServerSideProps, GetStaticProps } from "next";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import Posts from "@/components/Posts";
+import { GetServerSideProps } from "next";
+import { getSession, useSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
-import React from "react";
+import React, { memo, useCallback, useState } from "react";
 import UserList from "@/components/UserList";
-import { useRouter } from "next/router";
 
-
-type PostFormData = {
-  title: string;
-  content: string;
-  type: "update" | "create";
-  id?: string;
+type Props = {
+  data: string;
 };
 
-const Users = ({ data, redirect }: any) => {
+const Users: React.FC<Props> = ({ data }) => {
   const session = useSession();
   const [state, setState] = useState({
     users: JSON.parse(data),
   });
 
-  const deleteUserHandler = async (id: string) => {
+  const deleteUserHandler = useCallback(async (id: string) => {
     try {
       const response = await fetch(`http://localhost:3000/api/users/${id}`, {
         method: "DELETE",
@@ -33,18 +24,21 @@ const Users = ({ data, redirect }: any) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   if (session.data?.user.role === "1")
-    return (<UserList users={state.users} deleteUserHandler={deleteUserHandler} />);
+    return (
+      <UserList users={state.users} deleteUserHandler={deleteUserHandler} />
+    );
+  return null;
 };
 
-export default Users;
+export default memo(Users);
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  if (session && session.user.role !== '1') {
-    return { redirect: { destination: '/', permanent: true, }, props: [] }
+  if (session && session.user.role !== "1") {
+    return { redirect: { destination: "/", permanent: true }, props: [] };
   }
   const users = await prisma.user.findMany({
     include: {

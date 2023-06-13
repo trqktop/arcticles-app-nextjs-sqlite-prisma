@@ -1,19 +1,18 @@
-import { Button } from "@mui/base";
-import { MenuItem, Switch, Typography } from "@mui/joy";
-import { ListItemIcon } from "@mui/material";
+import { Switch, Typography } from "@mui/joy";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 const RoleToggler = () => {
   const session = useSession();
   const [isAdmin, setAdmin] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+
   useEffect(() => {
     setAdmin(session.data?.user.role !== "1");
   }, [session.data?.user.role]);
 
-  const toggleRole = () => {
+  const toggleRole = useCallback(() => {
     let role = "1";
     if (session.data?.user.role === "1") {
       role = "2";
@@ -32,12 +31,12 @@ const RoleToggler = () => {
           callbackUrl: "/",
           redirect: false,
         });
-        router.push('/')
+        await router.push("/");
       } catch (error) {
         console.log(error);
       }
     });
-  };
+  }, [session.data, router]);
 
   return (
     <Switch
@@ -49,4 +48,4 @@ const RoleToggler = () => {
   );
 };
 
-export default RoleToggler;
+export default memo(RoleToggler);

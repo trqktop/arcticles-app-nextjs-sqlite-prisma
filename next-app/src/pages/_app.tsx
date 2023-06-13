@@ -2,10 +2,7 @@ import Layout from "@/components/Layout";
 import { UpdatedPost } from "@/types";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
-import * as React from 'react'
-
-
-
+import * as React from "react";
 
 export const PostContext = React.createContext({
   deletePostHandler: (id: string) => Promise.resolve(),
@@ -13,53 +10,58 @@ export const PostContext = React.createContext({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-
-  const deletePostHandler = async (id: string) => {
+  const deletePostHandler = React.useCallback(async (id: string) => {
     try {
       const response = await fetch(`http://localhost:3000/api/post/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
-      return data
+      return data;
     } catch (error) {
-      return { message: 'error' }
+      return { message: "error" };
     }
-  };
+  }, []);
 
-  const updatePostHandler = async ({ type, id, ...data }: UpdatedPost) => {
-    switch (type) {
-      case "update":
-        try {
-          const response = await fetch(`http://localhost:3000/api/post/${id}`, {
-            method: "PATCH",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const result = await response.json();
-          return result
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-      case "create":
-        try {
-          const response = await fetch(`http://localhost:3000/api/post/new`, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const result = await response.json();
-          return result
-        } catch (error) {
-          console.log(error);
-        }
-        break;
-    }
-  };
+  const updatePostHandler = React.useCallback(
+    async ({ type, id, ...data }: UpdatedPost) => {
+      switch (type) {
+        case "update":
+          try {
+            const response = await fetch(
+              `http://localhost:3000/api/post/${id}`,
+              {
+                method: "PATCH",
+                body: JSON.stringify(data),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const result = await response.json();
+            return result;
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        case "create":
+          try {
+            const response = await fetch(`http://localhost:3000/api/post/new`, {
+              method: "PUT",
+              body: JSON.stringify(data),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            return result;
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+      }
+    },
+    []
+  );
 
   return (
     <SessionProvider session={pageProps.session}>
@@ -72,4 +74,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default App;
+export default React.memo(App);

@@ -1,16 +1,16 @@
 import { Card, Typography } from "@mui/joy";
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 type FormData = {
   email: string;
   password: string;
 };
 
-const Registration = () => {
+const Registration: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const submitHandler = async (form: FormData) => {
+  const submitHandler = useCallback(async (form: FormData) => {
     setLoading(true);
     const { email, password } = form;
     await fetch("api/registration", {
@@ -27,17 +27,17 @@ const Registration = () => {
         redirect: true,
       });
     });
-  };
+  }, []);
 
   return (
-    <Card style={{ margin: "auto" }} size='sm'>
+    <Card style={{ margin: "auto" }} size="sm">
       <Form
-        size='middle'
+        size="middle"
         disabled={loading}
         name="registration"
         layout="horizontal"
         onFinish={submitHandler}
-        style={{ width: '320px' }}
+        style={{ width: "320px" }}
         autoComplete="off"
       >
         <Form.Item
@@ -127,34 +127,40 @@ const Registration = () => {
         >
           <Input placeholder="Номер" />
         </Form.Item>
-        <Form.Item
-          name="date"
-        >
+        <Form.Item name="date">
           <DatePicker placeholder="Дата" />
         </Form.Item>
         <Form.Item name="role" initialValue={"1"}>
           <Select
-            placeholder='Роль'
+            placeholder="Роль"
             options={[
               {
                 value: "1",
-                label: <Typography fontSize={14} level='body1'>Админ</Typography>
+                label: (
+                  <Typography fontSize={14} level="body1">
+                    Админ
+                  </Typography>
+                ),
               },
               {
                 value: "2",
-                label: <Typography fontSize={14} level='body1'>Пользователь</Typography>
+                label: (
+                  <Typography fontSize={14} level="body1">
+                    Пользователь
+                  </Typography>
+                ),
               },
             ]}
           />
         </Form.Item>
-        <Form.Item >
+        <Form.Item>
           <Button loading={loading} type="primary" htmlType="submit">
             Зарегистрироваться
           </Button>
         </Form.Item>
       </Form>
-    </Card >
+    </Card>
   );
 };
 
-export default Registration;
+export default memo(Registration);

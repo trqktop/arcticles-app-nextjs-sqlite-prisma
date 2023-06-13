@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Header from "../Header";
 import styles from "./Layout.module.scss";
 type Props = {
@@ -13,4 +14,4 @@ const Layout = ({ children }: Props) => {
   );
 };
 
-export default Layout;
+export default memo(Layout);

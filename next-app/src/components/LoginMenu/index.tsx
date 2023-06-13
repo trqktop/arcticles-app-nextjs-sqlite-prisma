@@ -9,17 +9,22 @@ import { useSession } from "next-auth/react";
 import { Typography } from "@mui/joy";
 import { useRouter } from "next/router";
 
-export default function LoginMenu() {
+const LoginMenu = () => {
   const session = useSession();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    },
+    []
+  );
+
+  const handleClose = React.useCallback(() => {
     setAnchorEl(null);
-  };
+  }, []);
 
   if (!session.data?.user)
     return (
@@ -54,4 +59,5 @@ export default function LoginMenu() {
       </div>
     );
   return null;
-}
+};
+export default React.memo(LoginMenu);

@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../../lib/prisma";
 
-const options: any = {
+const options: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",

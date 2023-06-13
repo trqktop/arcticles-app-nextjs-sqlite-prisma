@@ -18,17 +18,22 @@ const Profile = () => {
   const session = useSession();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    },
+    []
+  );
 
-  const logoutHandler = () => {
+  const handleClose = React.useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const logoutHandler = React.useCallback(() => {
     signOut();
     setAnchorEl(null);
-  };
+  }, []);
+
 
   if (session.data) {
     const avatar = session.data.user.email[0].toUpperCase();
@@ -109,4 +114,4 @@ const Profile = () => {
   return null;
 };
 
-export default Profile;
+export default React.memo(Profile);

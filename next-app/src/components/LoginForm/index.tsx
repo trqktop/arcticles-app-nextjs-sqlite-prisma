@@ -18,20 +18,14 @@ const LoginForm = () => {
   const [error, setError] = React.useState<boolean>(false);
   const [ctx, setCtx] = React.useState<number>(0);
 
-  const clickHandler = async () => {
-    setOpen(true);
-  };
+  const closeModal = React.useCallback(() => {
+    setOpen(false);
+    setError(false);
+    setEmail("");
+    setPassword("");
+  }, []);
 
-  const registrationHandler = () => {
-    clickHandler();
-    setCtx(1);
-  };
-  const loginHandler = () => {
-    clickHandler();
-    setCtx(2);
-  };
-
-  const submitHandler = async () => {
+  const submitHandler = React.useCallback(async () => {
     if (ctx > 0 && ctx === 2)
       await signIn("credentials", {
         redirect: false,
@@ -64,22 +58,21 @@ const LoginForm = () => {
       });
     }
     setCtx(0);
-  };
+  }, [ctx, email, password, closeModal]);
 
-  const closeModal = () => {
-    setOpen(false);
-    setError(false);
-    setEmail("");
-    setPassword("");
-  };
+  const handleEmailChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(event.target.value);
+    },
+    []
+  );
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+  const handlePasswordChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value);
+    },
+    []
+  );
 
   const modalTitle = ctx === 1 ? "Регистрация" : ctx === 2 ? "Авторизация" : "";
 
@@ -143,4 +136,4 @@ const LoginForm = () => {
   return null;
 };
 
-export default LoginForm;
+export default React.memo(LoginForm);

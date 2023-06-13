@@ -1,5 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+export const config = {
+  api: {
+    bodyParser: { sizeLimit: "25mb" },
+  },
+};
+
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -17,10 +24,10 @@ export default async function handler(
     const id = await prisma.file.create({
       data: req.body,
       select: {
-        id: true
-      }
-    })
-    res.status(200).json(id)
+        id: true,
+      },
+    });
+    res.status(200).json(id);
   }
   if (req.method === "DELETE") {
     await prisma.file.delete({
@@ -28,6 +35,6 @@ export default async function handler(
         id,
       },
     });
-    res.status(200).json('success');
+    res.status(200).json("success");
   }
 }
