@@ -49,6 +49,7 @@ const options: AuthOptions = {
   },
   pages: {
     signIn: "/login",
+    newUser: "/registration",
   },
   secret: process.env.SECRET,
 };
