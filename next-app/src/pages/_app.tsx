@@ -12,7 +12,7 @@ export const PostContext = React.createContext({
 const App = ({ Component, pageProps }: AppProps) => {
   const deletePostHandler = React.useCallback(async (id: string) => {
     try {
-      const response = await fetch(`/api/post/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/post/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         case "update":
           try {
             const response = await fetch(
-              `/api/post/${id}`,
+              `http://localhost:3000/api/post/${id}`,
               {
                 method: "PATCH",
                 body: JSON.stringify(data),
@@ -45,7 +45,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           break;
         case "create":
           try {
-            const response = await fetch(`/api/post/new`, {
+            const response = await fetch(`http://localhost:3000/api/post/new`, {
               method: "PUT",
               body: JSON.stringify(data),
               headers: {

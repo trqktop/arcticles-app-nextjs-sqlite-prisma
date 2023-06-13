@@ -3,7 +3,6 @@ import { memo, useCallback, useState } from "react";
 import { Form, Input, Button } from "antd";
 import { Card } from "@mui/joy";
 import type InputProps from "@mui/joy";
-import { useRouter } from "next/router";
 type FormData = {
   email: string;
   password: string;
@@ -13,7 +12,7 @@ type ErrorStatus = "" | "warning" | "error" | undefined;
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [errorStatus, setError] = useState<ErrorStatus>("");
-  const router = useRouter();
+
   const submitHandler = useCallback(async (form: FormData) => {
     setLoading(true);
     await signIn("credentials", {
@@ -23,12 +22,10 @@ const Login = () => {
     }).then(({ ok, error }: any) => {
       if (error) {
         setError("error");
-      } else {
-        router.push("/");
       }
       setLoading(false);
     });
-  }, [router]);
+  }, []);
 
   return (
     <Card style={{ margin: "auto", width: "320px" }}>

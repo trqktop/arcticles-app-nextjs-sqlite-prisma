@@ -16,7 +16,7 @@ const Users: React.FC<Props> = ({ data }) => {
 
   const deleteUserHandler = useCallback(async (id: string) => {
     try {
-      const response = await fetch(`/api/users/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
         method: "DELETE",
       });
       const result = await response.json();

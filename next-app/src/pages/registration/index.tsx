@@ -13,29 +13,20 @@ const Registration: React.FC = () => {
   const submitHandler = useCallback(async (form: FormData) => {
     setLoading(true);
     const { email, password } = form;
-
-    try {
-      await fetch("/api/registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      }).then(async () => {
-        try {
-          await signIn("credentials", {
-            email: email,
-            password: password,
-            callbackUrl: "/",
-            redirect: true,
-          });
-        } catch (error) {
-          console.log(error);
-        }
+    await fetch("api/registration", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    }).then(async () => {
+      await signIn("credentials", {
+        email: email,
+        password: password,
+        callbackUrl: "/",
+        redirect: true,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    });
   }, []);
 
   return (

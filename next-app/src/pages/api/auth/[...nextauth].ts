@@ -47,10 +47,9 @@ const options: AuthOptions = {
       return session;
     },
   },
-  // pages: {
-  //   signIn: "/login",
-  //   newUser: "/registration",
-  // },
+  pages: {
+    signIn: "/login",
+  },
   secret: process.env.SECRET,
 };
 
