@@ -54,7 +54,7 @@ const Profile: React.FC<any> = ({ user }) => {
     [updatePostHandler, parsedUser]
   );
 
-  if (parsedUser) {
+  if (parsedUser.name) {
     const { name, lastname } = parsedUser;
     return (
       <div style={{ maxWidth: "852px", width: "100%", margin: "0 auto" }}>
@@ -108,7 +108,6 @@ const Profile: React.FC<any> = ({ user }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const users = await prisma.user.findMany();
-
   const paths = users.map((user) => ({
     params: { id: user.id.toString() },
   }));
@@ -117,30 +116,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (typeof params?.id == "string") {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: params.id,
-      },
-      include: {
-        posts: {
-          orderBy: [
-            {
-              createdAt: "desc",
-            },
-          ],
-          where: { published: true },
-          include: {
-            file: {
-              select: {
-                id: true,
-                name: true,
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: params.id,
+        },
+        include: {
+          posts: {
+            orderBy: [
+              {
+                createdAt: "desc",
+              },
+            ],
+            where: { published: true },
+            include: {
+              file: {
+                select: {
+                  id: true,
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-    });
-    return { props: { user: JSON.stringify(user) } };
+      });
+      return { props: { user: JSON.stringify(user) } };
+    } catch (error) {
+      console.log(error);
+    }
   }
   return { props: { user: null } };
 };
