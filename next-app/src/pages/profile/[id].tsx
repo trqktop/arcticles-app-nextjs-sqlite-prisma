@@ -61,7 +61,6 @@ const Profile: React.FC<ParamsProps> = (params) => {
 
   if (parsedUser) {
     const { name, lastname } = parsedUser;
-
     return (
       <div style={{ maxWidth: "852px", width: "100%", margin: "0 auto" }}>
         <Box sx={{ typography: "body1" }}>
@@ -118,7 +117,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = users.map((user) => ({
     params: { id: user.id.toString() },
   }));
-
   return { paths, fallback: true };
 };
 
@@ -147,7 +145,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         },
       },
     });
-    return { props: { user: JSON.stringify(user) } };
+    return { props: { user: JSON.stringify(user).trim() } };
   }
   return { props: { user: null } };
 };
