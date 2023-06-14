@@ -111,4 +111,5 @@ export default async function handler(
       }
       break;
   }
+  res.end()
 }
