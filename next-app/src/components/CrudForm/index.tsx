@@ -76,7 +76,7 @@ const CrudForm = ({
       if (dataFile) {
         const { file } = dataFile;
         const base64Content = await encodeFileToBase64(file);
-        fetch("/api/file/add", {
+        fetch("/api/file/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
