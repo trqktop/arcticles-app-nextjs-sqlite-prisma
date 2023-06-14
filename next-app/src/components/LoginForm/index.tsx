@@ -39,7 +39,7 @@ const LoginForm = () => {
       });
     if (ctx > 0 && ctx === 1) {
       const data = { email, password };
-      await fetch("http://localhost:3000/api/registration", {
+      await fetch("/api/registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
