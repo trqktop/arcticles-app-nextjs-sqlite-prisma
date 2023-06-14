@@ -59,6 +59,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           }
           break;
       }
+      console.log(JSON.stringify(data))
     },
     []
   );

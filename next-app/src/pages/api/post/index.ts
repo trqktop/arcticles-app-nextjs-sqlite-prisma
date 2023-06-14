@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "../../../../lib/prisma";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'GET')
+  if (req.method === 'PUT')
     try {
       try {
         await prisma.post.create({
