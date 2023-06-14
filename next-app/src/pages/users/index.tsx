@@ -1,6 +1,5 @@
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
 import React, { memo, useCallback, useState } from "react";
 import UserList from "@/components/UserList";
 
