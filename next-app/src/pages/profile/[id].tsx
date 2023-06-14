@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -35,22 +35,28 @@ const Profile: React.FC<ParamsProps> = (params) => {
     async (id: any) => {
       const result: any = await deletePostHandler(id);
       if (result && result.posts) {
-        setPosts(result.posts);
+        const posts = result.posts.filter(
+          (post: any) => post.authorId === parsedUser.id
+        );
+        setPosts(posts);
       }
     },
-    [deletePostHandler]
+    [deletePostHandler, parsedUser]
   );
 
   const updateHandler = React.useCallback(
     async (args: any) => {
       const result: any = await updatePostHandler(args);
       if (result && result.posts) {
-        setPosts(result.posts);
+        const posts = result.posts.filter(
+          (post: any) => post.authorId === parsedUser.id
+        );
+        setPosts(posts);
       } else {
         setPosts([]);
       }
     },
-    [updatePostHandler]
+    [updatePostHandler, parsedUser]
   );
 
   if (parsedUser) {
@@ -106,7 +112,17 @@ const Profile: React.FC<ParamsProps> = (params) => {
   return null;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const users = await prisma.user.findMany();
+
+  const paths = users.map((user) => ({
+    params: { id: user.id.toString() },
+  }));
+
+  return { paths, fallback: true };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (typeof params?.id == "string") {
     const user = await prisma.user.findUnique({
       where: {
@@ -135,4 +151,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
   return { props: { user: null } };
 };
+
 export default React.memo(Profile);

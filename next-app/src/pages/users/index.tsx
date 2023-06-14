@@ -37,10 +37,6 @@ const Users: React.FC<Props> = ({ data }) => {
 export default memo(Users);
 
 export const getStaticProps: GetStaticProps = async () => {
-  // const session = await getSession(context);
-  // if (session && session.user.role !== "1") {
-  //   return { redirect: { destination: "/", permanent: true }, props: [] };
-  // }
   const users = await prisma.user.findMany({
     include: {
       posts: {
