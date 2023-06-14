@@ -13,12 +13,7 @@ import { useState, useContext } from "react";
 import { PostContext } from "../_app";
 import prisma from "../../../lib/prisma";
 
-type ParamsProps = {
-  user: string;
-};
-
-const Profile: React.FC<ParamsProps> = (params) => {
-  const user = params.user;
+const Profile: React.FC<any> = ({ user }) => {
   const parsedUser = JSON.parse(user);
   const [posts, setPosts] = useState(parsedUser?.posts);
   const [value, setValue] = React.useState("1");
@@ -145,7 +140,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         },
       },
     });
-    return { props: { user: JSON.stringify(user).trim() } };
+    return { props: { user: JSON.stringify(user) } };
   }
   return { props: { user: null } };
 };
