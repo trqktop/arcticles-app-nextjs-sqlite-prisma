@@ -1,8 +1,9 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import UserList from "@/components/UserList";
+import { useRouter } from "next/router";
 
 type Props = {
   data: string;
@@ -35,11 +36,11 @@ const Users: React.FC<Props> = ({ data }) => {
 
 export default memo(Users);
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session && session.user.role !== "1") {
-    return { redirect: { destination: "/", permanent: true }, props: [] };
-  }
+export const getStaticProps: GetStaticProps = async () => {
+  // const session = await getSession(context);
+  // if (session && session.user.role !== "1") {
+  //   return { redirect: { destination: "/", permanent: true }, props: [] };
+  // }
   const users = await prisma.user.findMany({
     include: {
       posts: {
