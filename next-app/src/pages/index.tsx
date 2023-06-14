@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import Posts from "@/components/Posts";
 import prisma from "../../lib/prisma";
 import React, { useState, useMemo, memo, useCallback, useContext } from "react";
@@ -70,7 +70,7 @@ const Home: React.FC<Props> = ({ data }) => {
 
 export default memo(Home);
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await prisma.post.findMany({
     include: {
       author: true,
