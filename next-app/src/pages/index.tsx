@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import Posts from "@/components/Posts";
-
+import prisma from "../../lib/prisma";
 import React, { useState, useMemo, memo, useCallback, useContext } from "react";
 import CrudForm from "@/components/CrudForm";
 import { Add } from "@mui/icons-material";
