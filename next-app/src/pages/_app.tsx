@@ -45,7 +45,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           break;
         case "create":
           try {
-            const response = await fetch(`http://localhost:3000/api/post/new`, {
+            const response = await fetch(`http://localhost:3000/api/post`, {
               method: "PUT",
               body: JSON.stringify(data),
               headers: {
