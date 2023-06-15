@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -112,34 +112,40 @@ const Profile: React.FC<ParamsProps> = (params) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (typeof params?.id == "string") {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: params.id,
-      },
-      include: {
-        posts: {
-          orderBy: [
-            {
-              createdAt: "desc",
-            },
-          ],
-          where: { published: true },
-          include: {
-            file: {
-              select: {
-                id: true,
-                name: true,
-              },
+export const getStaticPaths: GetStaticPaths = async () => {
+  const users = await prisma.user.findMany({});
+  const paths = users.map((user) => ({ params: { id: user.id.toString() } }));
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: String(params?.id),
+    },
+    include: {
+      posts: {
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        where: { published: true },
+        include: {
+          file: {
+            select: {
+              id: true,
+              name: true,
             },
           },
         },
       },
-    });
-    return { props: { user: JSON.stringify(user) } };
-  }
-  return { props: { user: null } };
+    },
+  });
+
+  const stringifiedUser = JSON.stringify(user)
+
+  return { props: { user: stringifiedUser } };
 };
 
 export default React.memo(Profile);
