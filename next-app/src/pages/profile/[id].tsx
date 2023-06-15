@@ -51,16 +51,21 @@ const Profile: React.FC<ParamsProps> = (params) => {
           const { author, ...rest } = post;
           return rest;
         });
-        const [updatedPost] = filteredPosts
-        setPosts((posts: any) => {
-          return posts.map((post: any) => {
-            if (post.id === updatedPost.id) {
-              return { ...updatedPost, author: post.author };
-            } else {
-              return post;
-            }
+        if (args.type === 'create') {
+          setPosts(filteredPosts)
+        }
+        if (args.type === 'update') {
+          const [updatedPost] = filteredPosts
+          setPosts((posts: any) => {
+            return posts.map((post: any) => {
+              if (post.id === updatedPost.id) {
+                return { ...updatedPost, author: post.author };
+              } else {
+                return post;
+              }
+            })
           })
-        })
+        }
       } else {
         setPosts([]);
       }

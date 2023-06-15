@@ -15,20 +15,19 @@ const Home: React.FC<Props> = ({ data }) => {
   const [posts, setPosts] = useState<Post[]>(JSON.parse(data));
   const { deletePostHandler, updatePostHandler } = useContext(PostContext);
 
-  const deleteHandler = useCallback(
-    async (id: string) => {
-      const result: any = await deletePostHandler(id);
-      setPosts(result.posts);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const deleteHandler = async (id: string) => {
+    const result: any = await deletePostHandler(id);
+    setPosts(result.posts);
+  }
 
-  const updateHandler = useCallback(
-    async (args: UpdatedPost) => {
-      try {
-        const result: any = await updatePostHandler(args);
-        const [updatedPost] = result.posts
+  const updateHandler = async (args: UpdatedPost) => {
+    try {
+      const result: any = await updatePostHandler(args);
+      const [updatedPost] = result.posts
+      if (args.type === 'create') {
+        setPosts(result.posts)
+      }
+      if (args.type === 'update') {
         setPosts(posts => {
           return posts.map(post => {
             if (post.id === updatedPost.id) {
@@ -38,13 +37,11 @@ const Home: React.FC<Props> = ({ data }) => {
             }
           })
         })
-      } catch (error) {
-        console.log(error);
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const crudFormProps = useMemo(
     () => ({
@@ -80,6 +77,14 @@ const Home: React.FC<Props> = ({ data }) => {
 export default memo(Home);
 
 export const getStaticProps: GetStaticProps = async () => {
+
+  // async function deleteAllPosts() {
+  //   await prisma.post.deleteMany();
+  //   await prisma.file.deleteMany();
+  //   await prisma.user.deleteMany();
+  // }
+  // deleteAllPosts();
+
   const posts = await prisma.post.findMany({
     include: {
       author: true,

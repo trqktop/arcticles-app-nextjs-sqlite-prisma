@@ -129,6 +129,7 @@ const CrudForm = ({
             <Form
               size="large"
               name="curd"
+              validateTrigger='onInput'
               layout="vertical"
               onFinish={onFinish}
             >
