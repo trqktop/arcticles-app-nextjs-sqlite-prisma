@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -19,9 +19,6 @@ type ParamsProps = {
 
 const Profile: React.FC<ParamsProps> = (params) => {
   const user = params.user;
-  if (!user) {
-    return null;
-  }
   const parsedUser = JSON.parse(user);
   const [posts, setPosts] = useState(parsedUser?.posts);
   const [value, setValue] = React.useState("1");
@@ -38,27 +35,32 @@ const Profile: React.FC<ParamsProps> = (params) => {
     async (id: any) => {
       const result: any = await deletePostHandler(id);
       if (result && result.posts) {
-        setPosts(result.posts);
+        const posts = result.posts.filter(
+          (post: any) => post.authorId === parsedUser.id
+        );
+        setPosts(posts);
       }
     },
-    [deletePostHandler]
+    [deletePostHandler, parsedUser]
   );
 
   const updateHandler = React.useCallback(
     async (args: any) => {
       const result: any = await updatePostHandler(args);
       if (result && result.posts) {
-        setPosts(result.posts);
+        const posts = result.posts.filter(
+          (post: any) => post.authorId === parsedUser.id
+        );
+        setPosts(posts);
       } else {
         setPosts([]);
       }
     },
-    [updatePostHandler]
+    [updatePostHandler, parsedUser]
   );
 
-  if (parsedUser) {
+  if (parsedUser.name) {
     const { name, lastname } = parsedUser;
-
     return (
       <div style={{ maxWidth: "852px", width: "100%", margin: "0 auto" }}>
         <Box sx={{ typography: "body1" }}>
@@ -110,7 +112,6 @@ const Profile: React.FC<ParamsProps> = (params) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-
   if (typeof params?.id == "string") {
     const user = await prisma.user.findUnique({
       where: {
@@ -135,12 +136,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         },
       },
     });
-
-    if (user) {
-      return { props: { user: JSON.stringify(user) } };
-    }
+    return { props: { user: JSON.stringify(user) } };
   }
-
   return { props: { user: null } };
 };
+
 export default React.memo(Profile);
