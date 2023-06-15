@@ -10,7 +10,7 @@ export const PostContext = React.createContext({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const deletePostHandler = React.useCallback(async (id: string) => {
+  const deletePostHandler = async (id: string) => {
     try {
       const response = await fetch(`/api/post/${id}`, {
         method: "DELETE",
@@ -20,49 +20,49 @@ const App = ({ Component, pageProps }: AppProps) => {
     } catch (error) {
       return { message: "error" };
     }
-  }, []);
+  }
 
-  const updatePostHandler = React.useCallback(
-    async ({ type, id, ...data }: UpdatedPost) => {
-      switch (type) {
-        case "update":
-          try {
-            const response = await fetch(
-              `/api/post/${id}`,
-              {
-                method: "PATCH",
-                body: JSON.stringify(data),
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            const result = await response.json();
-            return result;
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case "create":
-          try {
-            const response = await fetch(`/api/post`, {
-              method: "PUT",
+  const updatePostHandler = async ({ type, id, ...data }: UpdatedPost) => {
+    console.log(type)
+    switch (type) {
+      case "update":
+        try {
+          const response = await fetch(
+            `/api/post/${id}`,
+            {
+              method: "PATCH",
               body: JSON.stringify(data),
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            const result = await response.json();
-            return result;
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-      }
-      console.log(JSON.stringify(data))
-    },
-    []
-  );
+            }
+          );
+          const result = await response.json();
+          console.log(result)
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "create":
+        try {
+          const response = await fetch(`/api/post`, {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const result = await response.json();
+          return result;
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+    }
+    console.log(JSON.stringify(data))
+  }
+
 
   return (
     <SessionProvider session={pageProps.session}>

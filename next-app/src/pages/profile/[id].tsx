@@ -24,34 +24,43 @@ const Profile: React.FC<ParamsProps> = (params) => {
   const [value, setValue] = React.useState("1");
   const { deletePostHandler, updatePostHandler } = useContext(PostContext);
 
-  const handleChange = useCallback(
-    (_: React.SyntheticEvent, newValue: string) => {
-      setValue(newValue);
-    },
-    []
-  );
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  }
 
-  const deleteHandler = useCallback(
-    async (id: any) => {
-      const result: any = await deletePostHandler(id);
-      if (result && result.posts) {
-        const posts = result.posts.filter(
-          (post: any) => post.authorId === parsedUser.id
-        );
-        setPosts(posts);
-      }
-    },
-    [deletePostHandler, parsedUser]
-  );
+
+  const deleteHandler = async (id: any) => {
+    const result: any = await deletePostHandler(id);
+    if (result && result.posts) {
+      const posts = result.posts.filter(
+        (post: any) => post.authorId === parsedUser.id
+      );
+      const filteredPosts = posts.map((post: any) => {
+        const { author, ...rest } = post;
+        return rest;
+      });
+      setPosts(filteredPosts);
+    }
+  }
 
   const updateHandler = useCallback(
     async (args: any) => {
       const result: any = await updatePostHandler(args);
       if (result && result.posts) {
-        const posts = result.posts.filter(
-          (post: any) => post.authorId === parsedUser.id
-        );
-        setPosts(posts);
+        const filteredPosts = result.posts.map((post: any) => {
+          const { author, ...rest } = post;
+          return rest;
+        });
+        const [updatedPost] = filteredPosts
+        setPosts((posts: any) => {
+          return posts.map((post: any) => {
+            if (post.id === updatedPost.id) {
+              return updatedPost;
+            } else {
+              return post;
+            }
+          })
+        })
       } else {
         setPosts([]);
       }

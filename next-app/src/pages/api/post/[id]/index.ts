@@ -61,6 +61,7 @@ export default async function handler(
           ],
           where: {
             published: true,
+            id: id
           },
         });
         res

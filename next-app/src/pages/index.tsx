@@ -28,7 +28,16 @@ const Home: React.FC<Props> = ({ data }) => {
     async (args: UpdatedPost) => {
       try {
         const result: any = await updatePostHandler(args);
-        setPosts(result.posts);
+        const [updatedPost] = result.posts
+        setPosts(posts => {
+          return posts.map(post => {
+            if (post.id === updatedPost.id) {
+              return updatedPost;
+            } else {
+              return post;
+            }
+          })
+        })
       } catch (error) {
         console.log(error);
       }
