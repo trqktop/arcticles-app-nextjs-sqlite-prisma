@@ -32,7 +32,7 @@ const Home: React.FC<Props> = ({ data }) => {
         setPosts(posts => {
           return posts.map(post => {
             if (post.id === updatedPost.id) {
-              return updatedPost;
+              return { ...updatedPost, author: post.author };
             } else {
               return post;
             }

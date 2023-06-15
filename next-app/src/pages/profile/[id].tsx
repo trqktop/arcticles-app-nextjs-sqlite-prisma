@@ -55,7 +55,7 @@ const Profile: React.FC<ParamsProps> = (params) => {
         setPosts((posts: any) => {
           return posts.map((post: any) => {
             if (post.id === updatedPost.id) {
-              return updatedPost;
+              return { ...updatedPost, author: post.author };
             } else {
               return post;
             }
