@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -19,6 +19,9 @@ type ParamsProps = {
 
 const Profile: React.FC<ParamsProps> = (params) => {
   const user = params.user;
+  if (!user) {
+    return null;
+  }
   const parsedUser = JSON.parse(user);
   const [posts, setPosts] = useState(parsedUser?.posts);
   const [value, setValue] = React.useState("1");
