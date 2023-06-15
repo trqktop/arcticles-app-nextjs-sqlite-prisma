@@ -19,6 +19,9 @@ type ParamsProps = {
 
 const Profile: React.FC<ParamsProps> = (params) => {
   const user = params.user;
+  if (!user) {
+    return null;
+  }
   const parsedUser = JSON.parse(user);
   const [posts, setPosts] = useState(parsedUser?.posts);
   const [value, setValue] = React.useState("1");
@@ -107,6 +110,7 @@ const Profile: React.FC<ParamsProps> = (params) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+
   if (typeof params?.id == "string") {
     const user = await prisma.user.findUnique({
       where: {
@@ -131,8 +135,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         },
       },
     });
-    return { props: { user: JSON.stringify(user) } };
+
+    if (user) {
+      return { props: { user: JSON.stringify(user) } };
+    }
   }
+
   return { props: { user: null } };
 };
 export default React.memo(Profile);
