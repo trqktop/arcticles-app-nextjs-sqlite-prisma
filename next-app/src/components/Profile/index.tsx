@@ -97,9 +97,9 @@ const Profile = () => {
             <Typography> {session.data.user.name}</Typography>
           </MenuItem>
           <Divider />
-          <MenuItem>
+          {/* <MenuItem>
             <RoleToggler />
-          </MenuItem>
+          </MenuItem> */}
           <Divider />
           <MenuItem onClick={logoutHandler}>
             <ListItemIcon>
